@@ -14,7 +14,10 @@ public class FunctionInvocation extends AbstractASTNode implements Statement, Ex
 
     public FunctionInvocation(int line, int column, Variable name, List<Expression> parameters) {
         super(line, column);
-        this.parameters = new ArrayList<>(parameters);
+        if (parameters != null)
+            this.parameters = new ArrayList<>(parameters);
+        else
+            this.parameters = new ArrayList<>(); //empty to avoid nullPointerException
         this.name = name;
     }
 

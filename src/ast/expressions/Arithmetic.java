@@ -20,4 +20,11 @@ public class Arithmetic extends AbstractASTNode implements Expression {
     public String toString() {
         return left.toString() + operand + right.toString();
     }
+
+    public static Expression createArithmeticOperation(int line, int column, Expression left, String operand,
+                                                       Expression right){
+        if (operand.equals("%"))
+            return new Modulus(line, column, left, right);
+        return new Arithmetic(line, column, left, operand, right);
+    }
 }

@@ -1,9 +1,6 @@
 package ast.definitions;
 
-import ast.AbstractASTNode;
-import ast.Definition;
-import ast.Statement;
-import ast.Type;
+import ast.*;
 
 import javax.swing.plaf.nimbus.State;
 import java.util.ArrayList;
@@ -13,13 +10,18 @@ public class FuncDefinition extends AbstractASTNode implements Definition {
 
     private String name;
     private Type type;
-    private List<Statement> statements;
+    private List<Statement> body;
+    private List<Definition> parameters;
 
-    public FuncDefinition(int line, int column, String name, Type type, List<Statement> statements){
+    public FuncDefinition(int line, int column, Type type, String name, List<Definition> parameters, List<Statement> body){
         super(line, column);
         this.name = name;
         this.type = type;
-        this.statements = new ArrayList<>(statements);
+        if (parameters != null)
+            this.parameters = new ArrayList<>(parameters);
+        else
+            this.parameters = new ArrayList<>(); //empty if no parameters
+        this.body = new ArrayList<>(body);
     }
 
     @Override
@@ -29,5 +31,30 @@ public class FuncDefinition extends AbstractASTNode implements Definition {
 
     public Type getType() {
         return type;
+    }
+
+    @Override
+    public String toString() {
+        return type + " " + name + "(" + parametersToString() + ") {" + bodyToString() + "}\n";
+    }
+
+    private String bodyToString() {
+        String res = "";
+        String sep = "\n";
+        for (Statement p: body) {
+            res += sep + p.toString() + ";";
+        }
+        return res;
+    }
+
+    private String parametersToString() {
+        String res = "";
+        String sep = "";
+        for (Definition p: parameters) {
+            res += sep + p.toString();
+            if (sep.isBlank())
+                sep = ", ";
+        }
+        return res;
     }
 }

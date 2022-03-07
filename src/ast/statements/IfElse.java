@@ -23,4 +23,20 @@ public class IfElse extends AbstractASTNode implements Statement {
         this(line, column, condition, ifBody);
         this.elseBody = new ArrayList<>(elseBody);
     }
+
+    @Override
+    public String toString() {
+        return "if (" + condition.toString() + ") {" + bodyToString(ifBody) + "}"
+                + (elseBody == null ? ""
+                                      : "else {" + bodyToString(elseBody) + "}");
+    }
+
+    private String bodyToString(List<Statement> body) {
+        String res = "";
+        String sep = "\n";
+        for (Statement p: body) {
+            res += sep + p.toString() + ";";
+        }
+        return res;
+    }
 }

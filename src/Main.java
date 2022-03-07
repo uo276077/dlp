@@ -1,5 +1,6 @@
 import ast.Expression;
 import ast.Program;
+import ast.Statement;
 import introspector.model.IntrospectorModel;
 import introspector.view.IntrospectorTree;
 import org.antlr.v4.runtime.CharStream;
@@ -26,9 +27,8 @@ public class Main {
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         CmmParser parser = new CmmParser(tokens);
 
-        //Program ast = parser.program().ast;
-        Expression ast = parser.expression().ast;
-        IntrospectorModel model=new IntrospectorModel("Expression", ast);
+        Program ast = parser.program().ast;
+        IntrospectorModel model=new IntrospectorModel("Program", ast);
         new IntrospectorTree("Introspector", model);
     }
 

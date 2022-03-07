@@ -12,4 +12,9 @@ public class Return extends AbstractASTNode implements Statement {
         super(line, column);
         this.returnExpression = returnExpression;
     }
+
+    @Override
+    public String toString() {
+        return "return " + returnExpression + ";";
+    }
 }
