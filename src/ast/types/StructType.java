@@ -1,7 +1,6 @@
 package ast.types;
 
 import ast.AbstractASTNode;
-import ast.Statement;
 import ast.Type;
 
 import java.util.ArrayList;
@@ -9,11 +8,17 @@ import java.util.List;
 
 public class StructType extends AbstractASTNode implements Type {
 
-    private List<StructField> fields;
+    private List<StructField> fields = new ArrayList<>();
 
     public StructType(int line, int column, List<StructField> fields) {
         super(line, column);
-        this.fields = new ArrayList<>(fields);
+        for (StructField sf: fields) {
+            if(this.fields.contains(sf))
+                new ErrorType(sf.getLine(), sf.getColumn(), "The field \"" + sf +
+                        "\" is duplicated in the struct");
+            else
+                this.fields.add(sf);
+        }
     }
 
     @Override

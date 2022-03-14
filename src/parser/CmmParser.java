@@ -302,7 +302,9 @@ public class CmmParser extends Parser {
 				((DefinitionContext)_localctx).b1 = function_body();
 				setState(62);
 				match(T__5);
-				 _localctx.ast.add( new FuncDefinition((((DefinitionContext)_localctx).rt1!=null?(((DefinitionContext)_localctx).rt1.start):null).getLine(), ((DefinitionContext)_localctx).rt1.ast.getColumn(), ((DefinitionContext)_localctx).rt1.ast, (((DefinitionContext)_localctx).id1!=null?((DefinitionContext)_localctx).id1.getText():null), _localctx.params, ((DefinitionContext)_localctx).b1.ast) ); 
+				 _localctx.ast.add( new FuncDefinition((((DefinitionContext)_localctx).rt1!=null?(((DefinitionContext)_localctx).rt1.start):null).getLine(), ((DefinitionContext)_localctx).rt1.ast.getColumn(),
+				                                            new FunctionType((((DefinitionContext)_localctx).rt1!=null?(((DefinitionContext)_localctx).rt1.start):null).getLine(), ((DefinitionContext)_localctx).rt1.ast.getColumn(), ((DefinitionContext)_localctx).rt1.ast, _localctx.params),
+				                                            (((DefinitionContext)_localctx).id1!=null?((DefinitionContext)_localctx).id1.getText():null), _localctx.params, ((DefinitionContext)_localctx).b1.ast) ); 
 				}
 				break;
 			}
@@ -644,7 +646,7 @@ public class CmmParser extends Parser {
 					((TypeContext)_localctx).t1 = type(0);
 					setState(123);
 					((TypeContext)_localctx).id1 = match(ID);
-					 _localctx.fields.add(new StructField(((TypeContext)_localctx).t1.ast, (((TypeContext)_localctx).id1!=null?((TypeContext)_localctx).id1.getText():null))); 
+					 _localctx.fields.add(new StructField((((TypeContext)_localctx).t1!=null?(((TypeContext)_localctx).t1.start):null).getLine(), ((TypeContext)_localctx).t1.ast.getColumn(), ((TypeContext)_localctx).t1.ast, (((TypeContext)_localctx).id1!=null?((TypeContext)_localctx).id1.getText():null))); 
 					setState(130);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
@@ -655,7 +657,7 @@ public class CmmParser extends Parser {
 						match(T__6);
 						setState(126);
 						((TypeContext)_localctx).id2 = match(ID);
-						 _localctx.fields.add(new StructField(((TypeContext)_localctx).t1.ast, (((TypeContext)_localctx).id2!=null?((TypeContext)_localctx).id2.getText():null))); 
+						 _localctx.fields.add(new StructField((((TypeContext)_localctx).t1!=null?(((TypeContext)_localctx).t1.start):null).getLine(), ((TypeContext)_localctx).t1.ast.getColumn(), ((TypeContext)_localctx).t1.ast, (((TypeContext)_localctx).id2!=null?((TypeContext)_localctx).id2.getText():null))); 
 						}
 						}
 						setState(132);

@@ -36,7 +36,9 @@ definition returns [List<Definition> ast = new ArrayList<Definition>();]
           (p1=parameters
             { $params.addAll($p1.ast); }
           )? ')' '{' b1=function_body '}' //function
-            { $ast.add( new FuncDefinition($rt1.start.getLine(), $rt1.ast.getColumn(), $rt1.ast, $id1.text, $params, $b1.ast) ); }
+            { $ast.add( new FuncDefinition($rt1.start.getLine(), $rt1.ast.getColumn(),
+                                            new FunctionType($rt1.start.getLine(), $rt1.ast.getColumn(), $rt1.ast, $params),
+                                            $id1.text, $params, $b1.ast) ); }
           ;
 
 function_body returns [List<Statement> ast = new ArrayList<Statement>();]:
@@ -78,9 +80,9 @@ type returns [Type ast]
         { $ast = ArrayType.createArray($t1.start.getLine(), $t1.ast.getColumn(), $t1.ast, LexerHelper.lexemeToInt($i1.text) );}
     | a='struct' '{'
     (t1=type id1=ID
-        { $fields.add(new StructField($t1.ast, $id1.text)); }
+        { $fields.add(new StructField($t1.start.getLine(), $t1.ast.getColumn(), $t1.ast, $id1.text)); }
     (',' id2=ID
-        { $fields.add(new StructField($t1.ast, $id2.text)); }
+        { $fields.add(new StructField($t1.start.getLine(), $t1.ast.getColumn(), $t1.ast, $id2.text)); }
     )*
     ';' )* '}'
         { $ast = new StructType($a.getLine(), $a.getCharPositionInLine()+1, $fields); }

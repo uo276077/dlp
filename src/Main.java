@@ -1,6 +1,5 @@
-import ast.Expression;
 import ast.Program;
-import ast.Statement;
+import ast.errorhandler.ErrorHandler;
 import introspector.model.IntrospectorModel;
 import introspector.view.IntrospectorTree;
 import org.antlr.v4.runtime.CharStream;
@@ -28,8 +27,14 @@ public class Main {
         CmmParser parser = new CmmParser(tokens);
 
         Program ast = parser.program().ast;
-        IntrospectorModel model=new IntrospectorModel("Program", ast);
-        new IntrospectorTree("Introspector", model);
+        if (ErrorHandler.getInstance().anyErrors())
+            ErrorHandler.getInstance().showErrors(System.err);
+        else {
+            // * The AST is shown
+            IntrospectorModel model=new IntrospectorModel(
+                    "Program", ast);
+            new IntrospectorTree("Introspector", model);
+        }
     }
 
 }
