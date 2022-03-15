@@ -3,6 +3,7 @@ package ast.statements;
 import ast.AbstractASTNode;
 import ast.Expression;
 import ast.Statement;
+import semantic.Visitor;
 
 
 public class Write extends AbstractASTNode implements Statement {
@@ -14,8 +15,17 @@ public class Write extends AbstractASTNode implements Statement {
         this.argument = argument;
     }
 
+    public Expression getArgument() {
+        return argument;
+    }
+
     @Override
     public String toString() {
         return "write " + argument + ";";
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }

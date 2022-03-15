@@ -2,8 +2,9 @@ package ast.expressions;
 
 import ast.AbstractASTNode;
 import ast.Expression;
+import semantic.Visitor;
 
-public class Modulus extends AbstractASTNode implements Expression {
+public class Modulus extends AbstractExpression {
 
     private Expression left;
     private Expression right;
@@ -17,5 +18,18 @@ public class Modulus extends AbstractASTNode implements Expression {
     @Override
     public String toString() {
         return left.toString() + '%' + right.toString();
+    }
+
+    public Expression getLeft() {
+        return left;
+    }
+
+    public Expression getRight() {
+        return right;
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }

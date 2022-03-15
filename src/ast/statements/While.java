@@ -3,6 +3,7 @@ package ast.statements;
 import ast.AbstractASTNode;
 import ast.Expression;
 import ast.Statement;
+import semantic.Visitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,14 @@ public class While extends AbstractASTNode implements Statement {
         this.body = new ArrayList<>(body);
     }
 
+    public Expression getCondition() {
+        return condition;
+    }
+
+    public List<Statement> getBody() {
+        return body;
+    }
+
     @Override
     public String toString() {
         return "while (" + condition + ") {" + bodyToString() + "}";
@@ -30,5 +39,10 @@ public class While extends AbstractASTNode implements Statement {
             res += sep + p.toString() + ";";
         }
         return res;
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }

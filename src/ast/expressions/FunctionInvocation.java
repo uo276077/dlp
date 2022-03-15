@@ -3,11 +3,12 @@ package ast.expressions;
 import ast.AbstractASTNode;
 import ast.Expression;
 import ast.Statement;
+import semantic.Visitor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FunctionInvocation extends AbstractASTNode implements Statement, Expression {
+public class FunctionInvocation extends AbstractExpression implements Statement {
 
     private List<Expression> parameters;
     private Variable name;
@@ -35,5 +36,14 @@ public class FunctionInvocation extends AbstractASTNode implements Statement, Ex
                 sep = ", ";
         }
         return res;
+    }
+
+    public List<Expression> getParameters() {
+        return parameters;
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }

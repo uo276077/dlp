@@ -4,6 +4,7 @@ import ast.AbstractASTNode;
 import ast.Definition;
 import ast.Statement;
 import ast.Type;
+import semantic.Visitor;
 
 public class VarDefinition extends AbstractASTNode implements Definition, Statement {
 
@@ -29,5 +30,10 @@ public class VarDefinition extends AbstractASTNode implements Definition, Statem
     @Override
     public String toString() {
         return type + " " + name;
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }

@@ -2,6 +2,7 @@ package ast.types;
 
 import ast.AbstractASTNode;
 import ast.Type;
+import semantic.Visitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,10 @@ public class StructType extends AbstractASTNode implements Type {
         }
     }
 
+    public List<StructField> getFields() {
+        return fields;
+    }
+
     @Override
     public String toString() {
         return "struct {" + fieldsToString() + "}";
@@ -33,5 +38,10 @@ public class StructType extends AbstractASTNode implements Type {
             res += sep + f.toString() + ";";
         }
         return res;
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }

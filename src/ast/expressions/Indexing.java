@@ -2,8 +2,9 @@ package ast.expressions;
 
 import ast.AbstractASTNode;
 import ast.Expression;
+import semantic.Visitor;
 
-public class Indexing extends AbstractASTNode implements Expression {
+public class Indexing extends AbstractExpression {
 
     private Expression index;
     private Expression array;
@@ -17,5 +18,18 @@ public class Indexing extends AbstractASTNode implements Expression {
     @Override
     public String toString() {
         return array.toString() + '[' + index.toString() + ']';
+    }
+
+    public Expression getIndex() {
+        return index;
+    }
+
+    public Expression getArray() {
+        return array;
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }

@@ -1,6 +1,7 @@
 package ast.definitions;
 
 import ast.*;
+import semantic.Visitor;
 
 import javax.swing.plaf.nimbus.State;
 import java.util.ArrayList;
@@ -56,5 +57,18 @@ public class FuncDefinition extends AbstractASTNode implements Definition {
                 sep = ", ";
         }
         return res;
+    }
+
+    public List<Statement> getBody() {
+        return body;
+    }
+
+    public List<Definition> getParameters() {
+        return parameters;
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }

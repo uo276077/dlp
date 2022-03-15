@@ -2,12 +2,21 @@ package ast.expressions;
 
 import ast.AbstractASTNode;
 import ast.Expression;
+import semantic.Visitor;
 
-public class Arithmetic extends AbstractASTNode implements Expression {
+public class Arithmetic extends AbstractExpression {
 
     private Expression left;
     private Expression right;
     private String operand;
+
+    public Expression getLeft() {
+        return left;
+    }
+
+    public Expression getRight() {
+        return right;
+    }
 
     public Arithmetic(int line, int column, Expression left, String operand, Expression right) {
         super(line, column);
@@ -26,5 +35,10 @@ public class Arithmetic extends AbstractASTNode implements Expression {
         if (operand.equals("%"))
             return new Modulus(line, column, left, right);
         return new Arithmetic(line, column, left, operand, right);
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }

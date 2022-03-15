@@ -2,6 +2,7 @@ package ast.types;
 
 import ast.AbstractASTNode;
 import ast.Type;
+import semantic.Visitor;
 
 import java.util.Objects;
 
@@ -14,6 +15,10 @@ public class StructField extends AbstractASTNode {
         super(line, column);
         this.name = name;
         this.type = type;
+    }
+
+    public Type getType() {
+        return type;
     }
 
     @Override
@@ -32,5 +37,10 @@ public class StructField extends AbstractASTNode {
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }
