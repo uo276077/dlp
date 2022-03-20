@@ -117,4 +117,22 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         intLiteral.setLvalue(false);
         return null;
     }
+
+    @Override
+    public Void visit(Read readSt, Void param) {
+        readSt.getArgument().accept(this, param);
+        if (!readSt.getArgument().getLvalue())
+            new ErrorType(readSt.getArgument().getLine(),readSt.getArgument().getColumn(),
+                    "L-value required");
+        return null;
+    }
+
+    @Override
+    public Void visit(Write writeSt, Void param) {
+        writeSt.getArgument().accept(this, param);
+        if (!writeSt.getArgument().getLvalue())
+            new ErrorType(writeSt.getArgument().getLine(),writeSt.getArgument().getColumn(),
+                    "L-value required");
+        return null;
+    }
 }

@@ -22,7 +22,9 @@ program returns [Program ast]
 main_function returns [Definition ast]:
             a='void' 'main' '(' ')' '{' b1=function_body '}'
                 { $ast = new FuncDefinition($a.getLine(), $a.getCharPositionInLine()+1,
-                                                new VoidType($a.getLine(), $a.getCharPositionInLine()+1),
+                                                new FunctionType($a.getLine(), $a.getCharPositionInLine()+1,
+                                                            new VoidType($a.getLine(), $a.getCharPositionInLine()+1),
+                                                            new ArrayList<Definition>()),
                                                 "main",
                                                 new ArrayList<Definition>(),
                                                 $b1.ast); }
@@ -139,7 +141,9 @@ block returns [List<Statement> ast = new ArrayList<Statement>();]:
 
 expression returns [Expression ast]
                     locals [List<Expression> args = null]:
-          ID '('
+          '(' e1=expression ')'
+            { $ast = $e1.ast; }
+        | ID '('
           (a1=arguments
             { $args = $a1.ast; }
           )? ')' //invocation
