@@ -6,7 +6,7 @@ import ast.Statement;
 import ast.Type;
 import semantic.Visitor;
 
-public class VarDefinition extends AbstractASTNode implements Definition, Statement {
+public class VarDefinition extends AbstractDefinition implements Statement {
 
     private int offset;
     private String name;

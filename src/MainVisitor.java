@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import parser.CmmLexer;
 import parser.CmmParser;
+import semantic.IdentificationVisitor;
 import semantic.TypeCheckingVisitor;
 import semantic.Visitor;
 
@@ -30,7 +31,7 @@ public class MainVisitor {
 
         Program ast = parser.program().ast;
 
-        Visitor visitor = new TypeCheckingVisitor();
+        Visitor visitor = new IdentificationVisitor();
         visitor.visit(ast, null);
 
         if (ErrorHandler.getInstance().anyErrors())

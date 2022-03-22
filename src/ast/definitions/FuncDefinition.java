@@ -7,7 +7,7 @@ import javax.swing.plaf.nimbus.State;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FuncDefinition extends AbstractASTNode implements Definition {
+public class FuncDefinition extends AbstractDefinition {
 
     private String name;
     private Type type;

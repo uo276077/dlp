@@ -46,4 +46,8 @@ public class FunctionInvocation extends AbstractExpression implements Statement 
     public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
         return visitor.visit(this, param);
     }
+
+    public Variable getName() {
+        return name;
+    }
 }
