@@ -103,6 +103,11 @@ R:
 	expression1.type.invoke(argTypes);
 
 P:
+	FuncDefinition: definition -> type statement*
+R:
+	statement.forEach(st -> st.returnType = type.returnType);
+
+P:
 	Return: statement -> expression
 R:
 	statement.returnType.returnable(expression);
