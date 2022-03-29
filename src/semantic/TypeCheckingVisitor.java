@@ -7,15 +7,109 @@ import ast.expressions.literals.IntLiteral;
 import ast.statements.*;
 import ast.types.*;
 
-public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
-    /*
-    P:
-        Arithmetic: expression1 -> expression2 (+|-|*|/) expression3
-    R:
-        expression1.type =
+/*
+P:
+	Arithmetic: expression1 -> expression2 (+|-|*|/) expression3
+R:
+	expression1.type = expression2.type.arithmetic(expression3.type);
 
+P:
+	Cast:  expression1 -> type expression2
+R:
+	expression1.type = expression2.type.castTo(type);
+
+P:
+	Comparison: expression1 -> expression2 (>|>=|<|<=|!=|==) expression3
+R:
+	expression1.type = expression2.type.compare(expression3.type);
+
+P:
+	FieldAccess: expression1 -> expression2 ID
+R:
+	expression1.type = expression2.type.dot(ID);
+
+P: (FunctionInvocation can also be a statement)
+	FunctionInvocation: expression1 -> expression2 expression3*
+R:
+	List<Type> argTypes = expression3*.stream()
+								.map(exp -> exp.getType())
+								.toList(); // .collect(Collectors.toList);
+	expression1.type = expression2.type.parenthesis(argTypes);
+
+P:
+	Indexing: expression1 -> expression2 expression3
+R:
+	expression1.type = expression2.type.squareBrackets(expression3.type);
+
+P:
+	Logical: expression1 -> expression2 ('&&'|'||') expression3
+R:
+	expression1.type = expression2.type.logical(expression3.type);
+
+P:
+	Modulus: expression1 -> expression2 expression3
+R:
+	expression1.type = expression2.type.modulus(expression3.type);
+
+P:
+	UnaryMinus: expression1 -> expression2
+R:
+	expression1.type = expression2.type.toUnaryMinus();
+
+P:
+	UnaryNot: expression1 -> expression2
+R:
+	expression1.type = expression2.type.negation();
+
+P:
+	Variable: expression -> definition ID
+R:
+	if (expression.definition == null)
+		expression.type = new ErrorType(expression.getLine(),expression.getColumn(),"Variable not defined");
+	else
+		expression.type = expression.definition.type;
+
+P:
+	Assignment: statement1 -> expression1 expression2
+R:
+	expression1.type.assign(expression2.type);
+
+P:
+	IfElse: statement1 -> expression statement2* statement3*
+R:
+	expression.type.asBoolean();
+
+P:
+	Read: statement -> expression
+R:
+	expression.type.readable();
+
+P:
+	While: statement1 -> expression statement2*
+R:
+	expression.type.asBoolean();
+
+P:
+	Write: statement -> expression
+R:
+	expression.type.writable();
+
+P:
+	FunctionInvocation: statement -> expression1 expression2*
+R:
+	List<Type> argTypes = expression2*.stream()
+								.map(exp -> exp.getType())
+								.toList(); // .collect(Collectors.toList);
+	expression1.type.invoke(argTypes);
+
+P:
+	Return: statement -> expression
+R:
+	statement.returnType.returnable(expression);
 
      */
+public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
+
 
 
     @Override

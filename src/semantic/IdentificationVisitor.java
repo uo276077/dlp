@@ -12,10 +12,9 @@ public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
     @Override
     public Void visit(Variable e, Void param) {
         Definition definition = symbolTable.find(e.getName());
-        if (definition == null)
-            new ErrorType(e.getLine(),e.getColumn(),"Variable not defined");
-        else
-            e.setDefinition(definition);
+//        if (definition == null)
+//            new ErrorType(e.getLine(),e.getColumn(),"Variable not defined");
+        e.setDefinition(definition);
         return null;
     }
 
@@ -40,7 +39,7 @@ public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
         if (!symbolTable.insert(varDefinition))
             new ErrorType(varDefinition.getLine(), varDefinition.getColumn(), "Definition already exists");
         else
-            varDefinition.getType().accept(this, null);
+            varDefinition.getType().accept(this,null);
         return null;
     }
 }
