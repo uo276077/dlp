@@ -8,6 +8,16 @@ import ast.statements.*;
 import ast.types.*;
 
 public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
+    /*
+    P:
+        Arithmetic: expression1 -> expression2 (+|-|*|/) expression3
+    R:
+        expression1.type =
+
+
+     */
+
+
     @Override
     public Void visit(Variable variable, Void param){
         variable.setLvalue(true);

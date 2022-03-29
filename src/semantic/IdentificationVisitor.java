@@ -14,7 +14,8 @@ public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
         Definition definition = symbolTable.find(e.getName());
         if (definition == null)
             new ErrorType(e.getLine(),e.getColumn(),"Variable not defined");
-        e.setDefinition(definition);
+        else
+            e.setDefinition(definition);
         return null;
     }
 
@@ -22,14 +23,15 @@ public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
     public Void visit(FuncDefinition funcDefinition, Void param) {
         if (!symbolTable.insert(funcDefinition))
             new ErrorType(funcDefinition.getLine(), funcDefinition.getColumn(), "Definition already exists");
+        else {
+            symbolTable.set(); // create a new scope
 
-        symbolTable.set(); // create a new scope
+            //traverse children
+            funcDefinition.getType().accept(this, null);
+            funcDefinition.getBody().forEach(p -> p.accept(this, null));
 
-        //traverse children
-        funcDefinition.getParameters().forEach(p -> p.accept(this, null));
-        funcDefinition.getBody().forEach(p -> p.accept(this, null));
-
-        symbolTable.reset(); // remove scope
+            symbolTable.reset(); // remove scope
+        }
         return null;
     }
 
@@ -37,7 +39,8 @@ public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
     public Void visit(VarDefinition varDefinition, Void param) {
         if (!symbolTable.insert(varDefinition))
             new ErrorType(varDefinition.getLine(), varDefinition.getColumn(), "Definition already exists");
-
+        else
+            varDefinition.getType().accept(this, null);
         return null;
     }
 }

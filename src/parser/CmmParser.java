@@ -1,4 +1,4 @@
-// Generated from E:/UNIOVI/TERCERO/Segundo cuatri/DLP/LAB/dlpLabProject/src/parser\Cmm.g4 by ANTLR 4.9.2
+// Generated from C:/Users/uo276077/Desktop/DLP Lab/dlp/src/parser\Cmm.g4 by ANTLR 4.9.2
 package parser;
 
     import ast.*;
@@ -218,7 +218,6 @@ public class CmmParser extends Parser {
 			                                                            new VoidType(((Main_functionContext)_localctx).a.getLine(), ((Main_functionContext)_localctx).a.getCharPositionInLine()+1),
 			                                                            new ArrayList<Definition>()),
 			                                                "main",
-			                                                new ArrayList<Definition>(),
 			                                                ((Main_functionContext)_localctx).b1.ast); 
 			}
 		}
@@ -306,7 +305,7 @@ public class CmmParser extends Parser {
 				match(T__5);
 				 _localctx.ast.add( new FuncDefinition((((DefinitionContext)_localctx).rt1!=null?(((DefinitionContext)_localctx).rt1.start):null).getLine(), ((DefinitionContext)_localctx).rt1.ast.getColumn(),
 				                                            new FunctionType((((DefinitionContext)_localctx).rt1!=null?(((DefinitionContext)_localctx).rt1.start):null).getLine(), ((DefinitionContext)_localctx).rt1.ast.getColumn(), ((DefinitionContext)_localctx).rt1.ast, _localctx.params),
-				                                            (((DefinitionContext)_localctx).id1!=null?((DefinitionContext)_localctx).id1.getText():null), _localctx.params, ((DefinitionContext)_localctx).b1.ast) ); 
+				                                            (((DefinitionContext)_localctx).id1!=null?((DefinitionContext)_localctx).id1.getText():null), ((DefinitionContext)_localctx).b1.ast) ); 
 				}
 				break;
 			}

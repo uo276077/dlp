@@ -26,7 +26,6 @@ main_function returns [Definition ast]:
                                                             new VoidType($a.getLine(), $a.getCharPositionInLine()+1),
                                                             new ArrayList<Definition>()),
                                                 "main",
-                                                new ArrayList<Definition>(),
                                                 $b1.ast); }
             ;
 
@@ -40,7 +39,7 @@ definition returns [List<Definition> ast = new ArrayList<Definition>();]
           )? ')' '{' b1=function_body '}' //function
             { $ast.add( new FuncDefinition($rt1.start.getLine(), $rt1.ast.getColumn(),
                                             new FunctionType($rt1.start.getLine(), $rt1.ast.getColumn(), $rt1.ast, $params),
-                                            $id1.text, $params, $b1.ast) ); }
+                                            $id1.text, $b1.ast) ); }
           ;
 
 function_body returns [List<Statement> ast = new ArrayList<Statement>();]:

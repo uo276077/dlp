@@ -12,16 +12,11 @@ public class FuncDefinition extends AbstractDefinition {
     private String name;
     private Type type;
     private List<Statement> body;
-    private List<Definition> parameters;
 
-    public FuncDefinition(int line, int column, Type type, String name, List<Definition> parameters, List<Statement> body){
+    public FuncDefinition(int line, int column, Type type, String name, List<Statement> body){
         super(line, column);
         this.name = name;
         this.type = type;
-        if (parameters != null)
-            this.parameters = new ArrayList<>(parameters);
-        else
-            this.parameters = new ArrayList<>(); //empty if no parameters
         this.body = new ArrayList<>(body);
     }
 
@@ -36,7 +31,7 @@ public class FuncDefinition extends AbstractDefinition {
 
     @Override
     public String toString() {
-        return type + " " + name + "(" + parametersToString() + ") {" + bodyToString() + "}\n";
+        return type + " " + name + "("  + ") {" + bodyToString() + "}\n";
     }
 
     private String bodyToString() {
@@ -48,23 +43,9 @@ public class FuncDefinition extends AbstractDefinition {
         return res;
     }
 
-    private String parametersToString() {
-        String res = "";
-        String sep = "";
-        for (Definition p: parameters) {
-            res += sep + p.toString();
-            if (sep.isBlank())
-                sep = ", ";
-        }
-        return res;
-    }
 
     public List<Statement> getBody() {
         return body;
-    }
-
-    public List<Definition> getParameters() {
-        return parameters;
     }
 
     @Override
