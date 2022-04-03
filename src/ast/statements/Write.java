@@ -6,7 +6,7 @@ import ast.Statement;
 import semantic.Visitor;
 
 
-public class Write extends AbstractASTNode implements Statement {
+public class Write extends AbstractStatement {
 
     private Expression argument;
 

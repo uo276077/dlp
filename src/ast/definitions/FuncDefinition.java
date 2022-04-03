@@ -10,13 +10,13 @@ import java.util.List;
 public class FuncDefinition extends AbstractDefinition {
 
     private String name;
-    private Type type;
+
     private List<Statement> body;
 
     public FuncDefinition(int line, int column, Type type, String name, List<Statement> body){
         super(line, column);
         this.name = name;
-        this.type = type;
+        setType(type);
         this.body = new ArrayList<>(body);
     }
 
@@ -25,13 +25,11 @@ public class FuncDefinition extends AbstractDefinition {
         return name;
     }
 
-    public Type getType() {
-        return type;
-    }
+
 
     @Override
     public String toString() {
-        return type + " " + name + "("  + ") {" + bodyToString() + "}\n";
+        return getType() + " " + name + "("  + ") {" + bodyToString() + "}\n";
     }
 
     private String bodyToString() {

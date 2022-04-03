@@ -8,7 +8,7 @@ import semantic.Visitor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class While extends AbstractASTNode implements Statement {
+public class While extends AbstractStatement {
 
     private Expression condition;
     private List<Statement> body;

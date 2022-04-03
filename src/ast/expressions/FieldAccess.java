@@ -28,4 +28,8 @@ public class FieldAccess extends AbstractExpression {
     public Expression getStruct() {
         return struct;
     }
+
+    public String getField() {
+        return field;
+    }
 }

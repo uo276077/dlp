@@ -6,8 +6,9 @@ import semantic.Visitor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class StructType extends AbstractASTNode implements Type {
+public class StructType extends AbstractType {
 
     private List<StructField> fields = new ArrayList<>();
 
@@ -15,8 +16,9 @@ public class StructType extends AbstractASTNode implements Type {
         super(line, column);
         for (StructField sf: fields) {
             if(this.fields.contains(sf))
-                new ErrorType(sf.getLine(), sf.getColumn(), "The field \"" + sf +
-                        "\" is duplicated in the struct");
+                new ErrorType(sf.getLine(), sf.getColumn(), String.format(
+                        "The field %s is duplicated in the struct.", sf.getName()
+                ));
             else
                 this.fields.add(sf);
         }
@@ -32,10 +34,10 @@ public class StructType extends AbstractASTNode implements Type {
     }
 
     private String fieldsToString() {
-        String res = "";
+        String res = "\n";
         String sep = "\n";
         for (StructField f: fields) {
-            res += sep + f.toString() + ";";
+            res += f.toString() + ";" + sep;
         }
         return res;
     }
@@ -43,5 +45,16 @@ public class StructType extends AbstractASTNode implements Type {
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
         return visitor.visit(this, param);
+    }
+
+    @Override
+    public Type dot(String field, int line, int column) {
+        for (StructField f: this.fields) {
+            if (f.getName().equals(field))
+                return f.getType();
+        }
+        return new ErrorType(line, column, String.format(
+                "Field %s is not defined in the struct.", field
+        ));
     }
 }

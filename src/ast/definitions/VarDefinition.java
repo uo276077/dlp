@@ -10,12 +10,12 @@ public class VarDefinition extends AbstractDefinition implements Statement {
 
     private int offset;
     private String name;
-    private Type type;
+    private Type returnType;
 
     public VarDefinition(int line, int column, String name, Type type){
         super(line, column);
         this.name = name;
-        this.type = type;
+        setType(type);
     }
 
     @Override
@@ -23,17 +23,24 @@ public class VarDefinition extends AbstractDefinition implements Statement {
         return name;
     }
 
-    public Type getType() {
-        return type;
-    }
 
     @Override
     public String toString() {
-        return type + " " + name;
+        return getType() + " " + name;
     }
 
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
         return visitor.visit(this, param);
+    }
+
+    @Override
+    public void setReturnType(Type type) {
+        this.returnType = type;
+    }
+
+    @Override
+    public Type getReturnType() {
+        return returnType;
     }
 }

@@ -8,8 +8,10 @@ import semantic.Visitor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-public class FunctionType extends AbstractASTNode implements Type {
+public class FunctionType extends AbstractType {
 
     private Type returnType;
     private List<Definition> parameters;
@@ -50,5 +52,31 @@ public class FunctionType extends AbstractASTNode implements Type {
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
         return visitor.visit(this, param);
+    }
+
+    @Override
+    public Type parenthesis(List<Type> argTypes, int line, int column) {
+        if (this.parameters.stream().map(p -> p.getType()).collect(Collectors.toList()).equals(argTypes))
+            return this;
+
+        Optional<Type> error = argTypes.stream().filter(p -> p instanceof ErrorType).findFirst();
+        if (error.isPresent()) return error.get();
+
+        return new ErrorType(line, column, String.format(
+                "The types of %s do not match the parameters for invocation of function.", argTypes
+        ));
+    }
+
+    @Override
+    public void invoke(List<Type> argTypes, int line, int column) {
+        if (this.parameters.stream().map(p -> p.getType()).collect(Collectors.toList()).equals(argTypes))
+            return;
+
+        Optional<Type> error = argTypes.stream().filter(p -> p instanceof ErrorType).findFirst();
+        if (error.isPresent()) return;
+
+        new ErrorType(line, column, String.format(
+                "The types of %s do not match the parameters for invocation of function.", argTypes
+        ));
     }
 }

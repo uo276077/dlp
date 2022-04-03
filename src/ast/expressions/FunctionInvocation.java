@@ -3,6 +3,7 @@ package ast.expressions;
 import ast.AbstractASTNode;
 import ast.Expression;
 import ast.Statement;
+import ast.Type;
 import semantic.Visitor;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ public class FunctionInvocation extends AbstractExpression implements Statement 
 
     private List<Expression> parameters;
     private Variable name;
+    private Type returnType;
 
     public FunctionInvocation(int line, int column, Variable name, List<Expression> parameters) {
         super(line, column);
@@ -49,5 +51,15 @@ public class FunctionInvocation extends AbstractExpression implements Statement 
 
     public Variable getName() {
         return name;
+    }
+
+    @Override
+    public void setReturnType(Type type) {
+        this.returnType = type;
+    }
+
+    @Override
+    public Type getReturnType() {
+        return returnType;
     }
 }

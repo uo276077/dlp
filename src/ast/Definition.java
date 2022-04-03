@@ -5,4 +5,7 @@ public interface Definition extends ASTNode{
 
     int getScope();
     void setScope(int scope);
+
+    Type getType();
+    void setType(Type type);
 }

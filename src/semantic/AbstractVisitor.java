@@ -27,8 +27,8 @@ public abstract class AbstractVisitor<TP,TR> implements Visitor<TP,TR> {
 
     @Override
     public TR visit(Comparison comparison, TP param) {
-        comparison.getLeft().accept(this,param);
-        comparison.getRight().accept(this,param);
+        comparison.getOp1().accept(this,param);
+        comparison.getOp2().accept(this,param);
         return null;
     }
 
@@ -54,15 +54,15 @@ public abstract class AbstractVisitor<TP,TR> implements Visitor<TP,TR> {
 
     @Override
     public TR visit(Logical logical, TP param) {
-        logical.getLeft().accept(this, param);
-        logical.getRight().accept(this, param);
+        logical.getOp1().accept(this, param);
+        logical.getOp2().accept(this, param);
         return null;
     }
 
     @Override
     public TR visit(Modulus modulus, TP param) {
-        modulus.getLeft().accept(this, param);
-        modulus.getRight().accept(this, param);
+        modulus.getOp1().accept(this, param);
+        modulus.getOp2().accept(this, param);
         return null;
     }
 
@@ -148,7 +148,7 @@ public abstract class AbstractVisitor<TP,TR> implements Visitor<TP,TR> {
 
     @Override
     public TR visit(ArrayType arrayType, TP param) {
-        arrayType.getType().accept(this, param);
+        arrayType.getElementType().accept(this, param);
         return null;
     }
 

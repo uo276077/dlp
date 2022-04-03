@@ -4,26 +4,26 @@ import ast.AbstractASTNode;
 import ast.Type;
 import semantic.Visitor;
 
-public class ArrayType extends AbstractASTNode implements Type {
+public class ArrayType extends AbstractType {
 
-    private Type type;
+    private Type elementType;
     private int size;
 
     private ArrayType(int line, int column, Type type, int size) {
         super(line, column);
-        this.type = type;
+        this.elementType = type;
         this.size = size;
     }
 
     public ArrayType(ArrayType oldType) {
-        this(oldType.getLine(), oldType.getColumn(), oldType.getType(), oldType.getSize());
+        this(oldType.getLine(), oldType.getColumn(), oldType.getElementType(), oldType.getSize());
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setElementType(Type elementType) {
+        this.elementType = elementType;
     }
 
-    public Type getType(){return type;}
+    public Type getElementType(){return elementType;}
     public int getSize(){return size;}
 
 
@@ -34,11 +34,11 @@ public class ArrayType extends AbstractASTNode implements Type {
         ArrayType returnArray = newArray;
         if (type instanceof ArrayType){
             returnArray = (ArrayType) type;
-            while (((ArrayType)oldType).getType() instanceof ArrayType) { //we need to keep a reference of the last array
-                oldType = ((ArrayType) oldType).getType(); //we get last array node
+            while (((ArrayType)oldType).getElementType() instanceof ArrayType) { //we need to keep a reference of the last array
+                oldType = ((ArrayType) oldType).getElementType(); //we get last array node
             }
-            (newArray).setType(((ArrayType) oldType).getType()); //link new node to old node's type
-            ((ArrayType)oldType).setType(newArray); //link old node to new node
+            (newArray).setElementType(((ArrayType) oldType).getElementType()); //link new node to old node's type
+            ((ArrayType)oldType).setElementType(newArray); //link old node to new node
         }
 
         return returnArray;
@@ -46,11 +46,32 @@ public class ArrayType extends AbstractASTNode implements Type {
 
     @Override
     public String toString() {
-        return "[" + size + "]"+ type.toString();
+        return "[" + size + "]"+ elementType.toString();
     }
 
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
         return visitor.visit(this, param);
+    }
+
+    @Override
+    public Type squareBrackets(Type t, int line, int column) {
+        if (t instanceof IntType)
+            return this.elementType;
+        if (t instanceof ErrorType)
+            return t;
+        return new ErrorType(line, column, String.format(
+                "The type of %s cannot be used as an index.", t));
+    }
+
+    @Override
+    public void assign(Type type, int line, int column) {
+        if (type instanceof ArrayType)
+            return;
+        if (type instanceof ErrorType)
+            return;
+        new ErrorType(line, column, String.format(
+                "Cannot assign type %s to type %s.", type, this
+        ));
     }
 }

@@ -21,9 +21,13 @@ public class StructField extends AbstractASTNode {
         return type;
     }
 
+    public String getName() {
+        return name;
+    }
+
     @Override
     public String toString() {
-        return type + name;
+        return type + " " + name;
     }
 
     @Override

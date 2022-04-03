@@ -1,17 +1,11 @@
-// Lvalue required
+int integer;
+char character;
+double real;
 
-int f() {
-	int a;
-	a = 0;
-	return a;
-}
 void main() {
-	int i;
-	(i+2) = 3;			// error
-	3 = 2;				// error
-	i > 3 = i;			// error
-	-i = 1;				// error
-	!i = 0;				// error
-	f() = i;			// error
-	((double)i) = 0;	// error
+  read integer; 
+  character=8.5; // * Error 1
+  3=integer; // * Error 2
+  read integer+2; // * Error 3
 }
+
