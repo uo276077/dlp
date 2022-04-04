@@ -80,4 +80,10 @@ public class FunctionType extends AbstractType {
 //                "The types of %s do not match the parameters for invocation of function.", argTypes
 //        ));
 //    }
+
+
+    @Override
+    public void writable(int line, int column) {
+
+    }
 }

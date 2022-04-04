@@ -82,4 +82,15 @@ public class DoubleType extends AbstractType {
                 "Cannot return type %s for function of return type %s.", type, this
         ));
     }
+
+    @Override
+    public Type castTo(Type castType, int line, int column) {
+        if (castType instanceof ErrorType)
+            return castType;
+        if (castType instanceof IntType)
+            return castType;
+        return new ErrorType(line, column, String.format(
+                "The type %s does not support casting to %s.", this, castType
+        ));
+    }
 }
