@@ -75,11 +75,6 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     }
 
     @Override
-    public Type getReturnType() {
-        return null; //TODO ???
-    }
-
-    @Override
     public void assign(Type type, int line, int column) {
         new ErrorType(line, column, String.format(
                 "The type of %s cannot be assigned to the type of %s.", type, this
@@ -126,5 +121,15 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
         new ErrorType(line, column, String.format(
                 "The types of %s and %s do not support invocation.", this, argTypes
         ));
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.getClass().equals(obj.getClass());
     }
 }

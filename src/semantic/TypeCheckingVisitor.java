@@ -195,7 +195,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
                                         .collect(Collectors.toList());
 
         invocation.setType( invocation.getName().getType().parenthesis(argTypes, invocation.getLine(), invocation.getColumn()) );
-        //invocation.getName().getType().invoke(argTypes, invocation.getLine(), invocation.getColumn());
+        //invocation.getName().getType().invoke(argTypes, invocation.getLine(), invocation.getColumn()); TODO
         return null;
     }
 
@@ -304,6 +304,9 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         ifElse.getElseBody().forEach(s -> s.accept(this, param));
 
         ifElse.getCondition().getType().asBoolean(ifElse.getCondition().getLine(), ifElse.getCondition().getColumn());
+
+        ifElse.getIfBody().forEach(st -> st.setReturnType(ifElse.getReturnType()));
+        ifElse.getElseBody().forEach(st -> st.setReturnType(ifElse.getReturnType()));
         return null;
     }
 
@@ -324,6 +327,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         whileSt.getBody().forEach(s -> s.accept(this, null));
 
         whileSt.getCondition().getType().asBoolean(whileSt.getCondition().getLine(), whileSt.getCondition().getColumn());
+        whileSt.getBody().forEach(st -> st.setReturnType(whileSt.getReturnType()));
         return null;
     }
 
@@ -337,7 +341,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public Void visit(FuncDefinition funcDefinition, Void param) {
-        funcDefinition.getBody().forEach(st -> st.setReturnType(funcDefinition.getType().getReturnType()));
+        funcDefinition.getBody().forEach(st -> st.setReturnType(((FunctionType)funcDefinition.getType()).getReturnType()));//TODO
 
         funcDefinition.getType().accept(this, param);
         funcDefinition.getBody().forEach(b -> b.accept(this, param));

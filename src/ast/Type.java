@@ -3,8 +3,6 @@ package ast;
 import java.util.List;
 
 public interface Type extends ASTNode {
-    Type getReturnType();
-
     Type arithmetic(Type t, int line, int column);
     Type castTo(Type castType, int line, int column);
     Type compare(Type t, int line, int column);

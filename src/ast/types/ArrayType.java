@@ -66,7 +66,7 @@ public class ArrayType extends AbstractType {
 
     @Override
     public void assign(Type type, int line, int column) {
-        if (type instanceof ArrayType)
+        if (type instanceof ArrayType) //TODO do we support this?
             return;
         if (type instanceof ErrorType)
             return;

@@ -54,4 +54,32 @@ public class DoubleType extends AbstractType {
     public Type toUnaryMinus(int line, int column) {
         return this;
     }
+
+    @Override
+    public void assign(Type type, int line, int column) {
+        if (type instanceof ErrorType) return;
+        if (type instanceof DoubleType) return;
+
+        new ErrorType(line, column, String.format(
+                "Cannot assign type %s to type %s.", type, this
+        ));
+    }
+
+    @Override
+    public void readable(int line, int column) {
+    }
+
+    @Override
+    public void writable(int line, int column) {
+    }
+
+    @Override
+    public void returnable(Type type, int line, int column) {
+        if (type instanceof DoubleType) return;
+        if (type instanceof ErrorType) return;
+
+        new ErrorType(line, column, String.format(
+                "Cannot return type %s for function of return type %s.", type, this
+        ));
+    }
 }

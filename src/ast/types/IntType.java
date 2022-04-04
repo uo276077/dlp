@@ -120,4 +120,14 @@ public class IntType extends AbstractType {
     @Override
     public void writable(int line, int column) {
     }
+
+    @Override
+    public void returnable(Type type, int line, int column) {
+        if (type instanceof IntType) return;
+        if (type instanceof ErrorType) return;
+
+        new ErrorType(line, column, String.format(
+                "Cannot return type %s for function of return type %s.", type, this
+        ));
+    }
 }
