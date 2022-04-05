@@ -57,4 +57,9 @@ public class StructType extends AbstractType {
                 "Field %s is not defined in the struct.", field
         ));
     }
+
+    @Override
+    public int numberOfBytes() {
+        return fields.stream().mapToInt(sf -> sf.getType().numberOfBytes()).sum();
+    }
 }

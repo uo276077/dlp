@@ -57,7 +57,7 @@ public class FunctionType extends AbstractType {
     @Override
     public Type parenthesis(List<Type> argTypes, int line, int column) {
         if (this.parameters.stream().map(p -> p.getType()).collect(Collectors.toList()).equals(argTypes))
-            return this;
+            return this.returnType;
 
         Optional<Type> error = argTypes.stream().filter(p -> p instanceof ErrorType).findFirst();
         if (error.isPresent()) return error.get();
@@ -67,23 +67,4 @@ public class FunctionType extends AbstractType {
         ));
     }
 
-    //TODO
-//    @Override
-//    public void invoke(List<Type> argTypes, int line, int column) {
-//        if (this.parameters.stream().map(p -> p.getType()).collect(Collectors.toList()).equals(argTypes))
-//            return;
-//
-//        Optional<Type> error = argTypes.stream().filter(p -> p instanceof ErrorType).findFirst();
-//        if (error.isPresent()) return;
-//
-//        new ErrorType(line, column, String.format(
-//                "The types of %s do not match the parameters for invocation of function.", argTypes
-//        ));
-//    }
-
-
-    @Override
-    public void writable(int line, int column) {
-
-    }
 }

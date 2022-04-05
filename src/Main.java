@@ -1,5 +1,6 @@
 import ast.Program;
 import ast.errorhandler.ErrorHandler;
+import codegeneration.OffsetVisitor;
 import introspector.model.IntrospectorModel;
 import introspector.view.IntrospectorTree;
 import org.antlr.v4.runtime.CharStream;
@@ -35,6 +36,9 @@ public class Main {
         visitor.visit(ast, null);
 
         visitor = new TypeCheckingVisitor();
+        visitor.visit(ast, null);
+
+        visitor = new OffsetVisitor();
         visitor.visit(ast, null);
 
         if (ErrorHandler.getInstance().anyErrors())

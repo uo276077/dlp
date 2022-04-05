@@ -20,5 +20,6 @@ public interface Type extends ASTNode {
     void returnable(Type type, int line, int column);
 
     Type parenthesis(List<Type> argTypes, int line, int column);
-    void invoke(List<Type> argTypes, int line, int column);
+
+    int numberOfBytes();
 }

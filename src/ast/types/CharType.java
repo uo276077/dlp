@@ -22,7 +22,7 @@ public class CharType extends AbstractType {
 
     @Override
     public Type arithmetic(Type t, int line, int column) {
-        if (t instanceof ErrorType)
+        if (t instanceof ErrorType)//TODO only arithmetic with same type
             return t;
         if (t instanceof IntType)
             return t;
@@ -52,13 +52,9 @@ public class CharType extends AbstractType {
     @Override
     public Type compare(Type t, int line, int column) {
         if (t instanceof ErrorType)
-            return t;
-        if (t instanceof IntType)
-            return t;
-        if (t instanceof DoubleType)
-            return new IntType(line, column); //TODO ??
+            return t; //TODO only comparing with same type
         if (t instanceof CharType)
-            return new IntType(line,column); //TODO ??
+            return new IntType(line,column);
         return new ErrorType(line, column, String.format(
                 "The type of %s does not support comparisons.", t
         ));
@@ -68,18 +64,11 @@ public class CharType extends AbstractType {
     public Type modulus(Type t, int line, int column) {
         if (t instanceof ErrorType)
             return t;
-        if (t instanceof IntType)
-            return t;
         if (t instanceof CharType)
-            return new IntType(line, column); //TODO ??
+            return new IntType(line, column);
         return new ErrorType(line, column, String.format(
                 "The type of %s does not support modulus.", t
         ));
-    }
-
-    @Override
-    public Type toUnaryMinus(int line, int column) {
-        return new IntType(line, column); //TODO ??
     }
 
     @Override
@@ -108,5 +97,10 @@ public class CharType extends AbstractType {
         new ErrorType(line, column, String.format(
                 "Cannot return type %s for function of return type %s.", type, this
         ));
+    }
+
+    @Override
+    public int numberOfBytes() {
+        return 1;
     }
 }

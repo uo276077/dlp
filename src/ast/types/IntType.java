@@ -56,8 +56,6 @@ public class IntType extends AbstractType {
             return t;
         if (t instanceof IntType)
             return this;
-        if (t instanceof CharType)
-            return this;
         return new ErrorType(line, column, String.format(
                 "The type of %s does not support modulus.", t
         ));
@@ -75,7 +73,9 @@ public class IntType extends AbstractType {
         if (castType instanceof DoubleType)
             return castType;
         if (castType instanceof CharType)
-            return castType; //TODO range?
+            return castType;
+        //TODO CAN BE CAST TO ITSELF
+        //allowed any combination between built in types
 
         return new ErrorType(line, column, String.format(
                 "IntType cannot be casted to %s.", castType
@@ -129,5 +129,10 @@ public class IntType extends AbstractType {
         new ErrorType(line, column, String.format(
                 "Cannot return type %s for function of return type %s.", type, this
         ));
+    }
+
+    @Override
+    public int numberOfBytes() {
+        return 2;
     }
 }

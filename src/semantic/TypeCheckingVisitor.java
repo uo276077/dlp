@@ -182,7 +182,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         return null;
     }
 
-    //TODO
     @Override
     public Void visit(FunctionInvocation invocation, Void param) {
         invocation.getParameters().forEach(p -> p.accept(this, param));
@@ -195,7 +194,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
                                         .collect(Collectors.toList());
 
         invocation.setType( invocation.getName().getType().parenthesis(argTypes, invocation.getLine(), invocation.getColumn()) );
-        //invocation.getName().getType().invoke(argTypes, invocation.getLine(), invocation.getColumn()); TODO
         return null;
     }
 
@@ -341,7 +339,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public Void visit(FuncDefinition funcDefinition, Void param) {
-        funcDefinition.getBody().forEach(st -> st.setReturnType(((FunctionType)funcDefinition.getType()).getReturnType()));//TODO
+        funcDefinition.getBody().forEach(st -> st.setReturnType(((FunctionType)funcDefinition.getType()).getReturnType()));
 
         funcDefinition.getType().accept(this, param);
         funcDefinition.getBody().forEach(b -> b.accept(this, param));

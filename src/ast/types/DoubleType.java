@@ -93,4 +93,9 @@ public class DoubleType extends AbstractType {
                 "The type %s does not support casting to %s.", this, castType
         ));
     }
+
+    @Override
+    public int numberOfBytes() {
+        return 4;
+    }
 }

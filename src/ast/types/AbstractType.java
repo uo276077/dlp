@@ -117,13 +117,6 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     }
 
     @Override
-    public void invoke(List<Type> argTypes, int line, int column) {
-        new ErrorType(line, column, String.format(
-                "The types of %s and %s do not support invocation.", this, argTypes
-        ));
-    }
-
-    @Override
     public int hashCode() {
         return super.hashCode();
     }
@@ -131,5 +124,10 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     @Override
     public boolean equals(Object obj) {
         return this.getClass().equals(obj.getClass());
+    }
+
+    @Override
+    public int numberOfBytes() {
+        return 0;
     }
 }
