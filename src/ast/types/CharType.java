@@ -22,16 +22,12 @@ public class CharType extends AbstractType {
 
     @Override
     public Type arithmetic(Type t, int line, int column) {
-        if (t instanceof ErrorType)//TODO only arithmetic with same type
-            return t;
-        if (t instanceof IntType)
-            return t;
-        if (t instanceof DoubleType)
+        if (t instanceof ErrorType)
             return t;
         if (t instanceof CharType)
             return this;
         return new ErrorType(line, column, String.format(
-                "The type of %s does not support arithmetic operations.", t
+                "The type of %s does not support arithmetic operations with %s.", t, this
         ));
     }
 
@@ -43,7 +39,8 @@ public class CharType extends AbstractType {
             return castType;
         if (castType instanceof IntType)
             return castType;
-
+        if (castType instanceof CharType)
+            return this;
         return new ErrorType(line, column, String.format(
                 "CharType cannot be casted to %s.", castType
         ));
@@ -52,11 +49,11 @@ public class CharType extends AbstractType {
     @Override
     public Type compare(Type t, int line, int column) {
         if (t instanceof ErrorType)
-            return t; //TODO only comparing with same type
+            return t;
         if (t instanceof CharType)
             return new IntType(line,column);
         return new ErrorType(line, column, String.format(
-                "The type of %s does not support comparisons.", t
+                "The type of %s does not support comparisons with %s.", t, this
         ));
     }
 

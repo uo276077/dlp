@@ -65,17 +65,6 @@ public class ArrayType extends AbstractType {
     }
 
     @Override
-    public void assign(Type type, int line, int column) {
-        if (type instanceof ArrayType) //TODO do we support this? ANSWER NO
-            return;
-        if (type instanceof ErrorType)
-            return;
-        new ErrorType(line, column, String.format(
-                "Cannot assign type %s to type %s.", type, this
-        ));
-    }
-
-    @Override
     public int numberOfBytes() {
         return elementType.numberOfBytes() * size;
     }

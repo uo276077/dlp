@@ -26,12 +26,8 @@ public class IntType extends AbstractType {
             return t;
         if (t instanceof IntType)
             return this;
-        if (t instanceof DoubleType)
-            return t;
-        if (t instanceof CharType)
-            return this;
         return new ErrorType(line, column, String.format(
-                "The type of %s does not support arithmetic operations.", t
+                "The type of %s does not support arithmetic operations with %s.", t, this
         ));
     }
 
@@ -41,12 +37,8 @@ public class IntType extends AbstractType {
             return t;
         if (t instanceof IntType)
             return this;
-        if (t instanceof DoubleType)
-            return this;
-        if (t instanceof CharType)
-            return this;
         return new ErrorType(line, column, String.format(
-                "The type of %s does not support comparisons.", t
+                "The type of %s does not support comparisons with %s.", t, this
         ));
     }
 
@@ -74,9 +66,8 @@ public class IntType extends AbstractType {
             return castType;
         if (castType instanceof CharType)
             return castType;
-        //TODO CAN BE CAST TO ITSELF
-        //allowed any combination between built in types
-
+        if (castType instanceof  IntType)
+            return this;
         return new ErrorType(line, column, String.format(
                 "IntType cannot be casted to %s.", castType
         ));

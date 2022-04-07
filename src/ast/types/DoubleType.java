@@ -24,14 +24,10 @@ public class DoubleType extends AbstractType {
     public Type arithmetic(Type t, int line, int column) {
         if (t instanceof ErrorType)
             return t;
-        if (t instanceof IntType)
-            return this;
         if (t instanceof DoubleType)
             return this;
-        if (t instanceof CharType)
-            return this;
         return new ErrorType(line, column, String.format(
-                "The type of %s does not support arithmetic operations.", t
+                "The type of %s does not support arithmetic operations with %s.", t, this
         ));
     }
 
@@ -39,14 +35,10 @@ public class DoubleType extends AbstractType {
     public Type compare(Type t, int line, int column) {
         if (t instanceof ErrorType)
             return t;
-        if (t instanceof IntType)
-            return t;
         if (t instanceof DoubleType)
-            return new IntType(line, column); //TODO ??
-        if (t instanceof CharType)
-            return new IntType(line, column); //TODO ??
+            return new IntType(line, column);
         return new ErrorType(line, column, String.format(
-                "The type of %s does not support comparisons.", t
+                "The type of %s does not support comparisons with %s.", t, this
         ));
     }
 
@@ -89,6 +81,10 @@ public class DoubleType extends AbstractType {
             return castType;
         if (castType instanceof IntType)
             return castType;
+        if (castType instanceof CharType)
+            return castType;
+        if (castType instanceof DoubleType)
+            return this;
         return new ErrorType(line, column, String.format(
                 "The type %s does not support casting to %s.", this, castType
         ));
