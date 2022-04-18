@@ -43,4 +43,12 @@ public class VarDefinition extends AbstractDefinition implements Statement {
     public Type getReturnType() {
         return returnType;
     }
+
+    public int getOffset() {
+        return offset;
+    }
+
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
 }

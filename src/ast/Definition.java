@@ -9,6 +9,4 @@ public interface Definition extends ASTNode{
     Type getType();
     void setType(Type type);
 
-    int getOffset();
-    void setOffset(int offset);
 }

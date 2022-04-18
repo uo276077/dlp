@@ -7,7 +7,6 @@ import ast.Type;
 public abstract class AbstractDefinition extends AbstractASTNode implements Definition {
     private int scope;
     private Type type;
-    private int offset;
 
     public AbstractDefinition(int line, int column) {
         super(line, column);
@@ -31,13 +30,4 @@ public abstract class AbstractDefinition extends AbstractASTNode implements Defi
     @Override
     public void setType(Type type) {this.type = type;}
 
-    @Override
-    public int getOffset() {
-        return offset;
-    }
-
-    @Override
-    public void setOffset(int offset) {
-        this.offset = offset;
-    }
 }

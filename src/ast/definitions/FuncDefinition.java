@@ -25,8 +25,6 @@ public class FuncDefinition extends AbstractDefinition {
         return name;
     }
 
-
-
     @Override
     public String toString() {
         return getType() + " " + name + "("  + ") {" + bodyToString() + "}\n";
@@ -40,7 +38,6 @@ public class FuncDefinition extends AbstractDefinition {
         }
         return res;
     }
-
 
     public List<Statement> getBody() {
         return body;
