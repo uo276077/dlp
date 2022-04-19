@@ -75,17 +75,17 @@ R:
 		expression.type = expression.definition.type;
 
 P:
-    CharLiteral: expression -> ID
+    CharLiteral: expression -> CHAR_CONSTANT
 R:
     expression.type = new CharType();
 
 P:
-    DoubleLiteral: expression -> number
+    DoubleLiteral: expression -> REAL_CONSTANT
 R:
     expression.type = new DoubleType();
 
 P:
-    IntLiteral: expression -> number
+    IntLiteral: expression -> INT_CONSTANT
 R:
     expression.type = new IntType();
 

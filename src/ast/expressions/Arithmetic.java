@@ -1,6 +1,5 @@
 package ast.expressions;
 
-import ast.AbstractASTNode;
 import ast.Expression;
 import semantic.Visitor;
 
@@ -8,7 +7,7 @@ public class Arithmetic extends AbstractExpression {
 
     private Expression left;
     private Expression right;
-    private String operand;
+    private String operator;
 
     public Expression getLeft() {
         return left;
@@ -21,13 +20,13 @@ public class Arithmetic extends AbstractExpression {
     public Arithmetic(int line, int column, Expression left, String operand, Expression right) {
         super(line, column);
         this.left = left;
-		this.operand = operand;
+		this.operator = operand;
         this.right = right;
     }
 
     @Override
     public String toString() {
-        return left.toString() + operand + right.toString();
+        return left.toString() + operator + right.toString();
     }
 
     public static Expression createArithmeticOperation(int line, int column, Expression left, String operand,
