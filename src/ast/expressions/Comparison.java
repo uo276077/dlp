@@ -25,6 +25,10 @@ public class Comparison extends AbstractExpression {
         this.operand = operand;
     }
 
+    public String getOperand() {
+        return operand;
+    }
+
     @Override
     public String toString() {
         return op1.toString() + operand + op2.toString();

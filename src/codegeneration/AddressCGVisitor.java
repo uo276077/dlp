@@ -16,9 +16,24 @@ address[[ Variable: expression -> ID ]] =
 			< push bp >
 			< pushi > expression.definition.offset
 			< addi >
-		}
-		< pusha > expression.definition.offset
+		} else
+		    < pusha > expression.definition.offset
 */
 
-public class AddressCGVisitor extends AbstractCGVisitor {
+import ast.definitions.VarDefinition;
+import ast.expressions.Variable;
+
+public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
+
+    public AddressCGVisitor(CodeGenerator cg) {
+        super(cg);
+    }
+
+    @Override
+    public Void visit(Variable variable, Void param) {
+
+        cg.pushAddress((VarDefinition)variable.getDefinition());
+
+        return null;
+    }
 }

@@ -86,7 +86,142 @@ value[[ Logical: expression1 -> expression2 expression3 ]] =
 value[[ Cast: expression1 -> type expression2 ]] =
 		value[[expression2]]
 		expression2.type.convertTo(type)
- */
 
-public class ValueCGVisitor extends AbstractCGVisitor {
+value[[ UnaryNot: expression1 -> expression2 ]] =
+        value[[expression2]]
+        < not >
+
+value[[ UnaryMinus: expression1 -> expression2 ]] =
+        < push >
+        expression1.type.suffix() < 0 >
+        value[[expression2]]
+        < sub > expression1.type.suffix()
+
+value[[ Modulus: expression1 -> expression2 expression3 ]] =
+        value[[expression2]]
+        value[[expression3]]
+        < mod >
+
+*/
+
+import ast.expressions.*;
+import ast.expressions.literals.CharLiteral;
+import ast.expressions.literals.DoubleLiteral;
+import ast.expressions.literals.IntLiteral;
+import semantic.Visitor;
+
+public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
+
+    private Visitor<Void,Void> address;
+
+    public ValueCGVisitor(CodeGenerator cg, Visitor<Void,Void> address) {
+        super(cg);
+        this.address = address;
+    }
+
+    @Override
+    public Void visit(CharLiteral charLiteral, Void param) {
+
+        cg.pushByte((int) charLiteral.getValue());
+
+        return null;
+    }
+
+    @Override
+    public Void visit(DoubleLiteral doubleLiteral, Void param) {
+
+        cg.pushFloat(doubleLiteral.getValue());
+
+        return null;
+    }
+
+    @Override
+    public Void visit(IntLiteral intLiteral, Void param) {
+
+        cg.pushInt(intLiteral.getValue());
+
+        return null;
+    }
+
+    @Override
+    public Void visit(Variable variable, Void param) {
+
+        variable.accept(address, null);
+        cg.load(variable);
+
+        return null;
+    }
+
+
+    @Override
+    public Void visit(Arithmetic arith, Void param) {
+
+        arith.getLeft().accept(this, null);
+        cg.convert(arith.getLeft().getType(), arith.getType());
+
+        arith.getRight().accept(this, null);
+        cg.convert(arith.getRight().getType(), arith.getType());
+
+        cg.arithmetic(arith.getOperator(), arith.getType());
+
+        return null;
+    }
+
+    @Override
+    public Void visit(Comparison comparison, Void param) {
+
+        comparison.getOp1().accept(this, null);
+        cg.charToInt(comparison.getOp1().getType());
+
+        comparison.getOp2().accept(this, null);
+        cg.charToInt(comparison.getOp2().getType());
+
+        cg.compare(comparison.getOperand(), comparison.getType());
+
+        return null;
+    }
+
+    @Override
+    public Void visit(Cast cast, Void param) {
+
+        cg.convert(cast.getExpression().getType(), cast.getCastType());
+
+        return null;
+    }
+
+    @Override
+    public Void visit(Logical logical, Void param) {
+
+        logical.getOp1().accept(this, null);
+        logical.getOp2().accept(this, null);
+
+        cg.logical(logical.getOperand());
+
+        return null;
+    }
+
+    @Override
+    public Void visit(Modulus modulus, Void param) {
+
+        modulus.getOp1().accept(this, null);
+        modulus.getOp2().accept(this, null);
+
+        cg.modulus();
+
+        return null;
+    }
+
+    @Override
+    public Void visit(UnaryMinus unaryMinus, Void param) {
+        return null;
+    }
+
+    @Override
+    public Void visit(UnaryNot unaryNot, Void param) {
+
+        unaryNot.getExpression().accept(this, null);
+        cg.negate();
+
+        return null;
+    }
 }

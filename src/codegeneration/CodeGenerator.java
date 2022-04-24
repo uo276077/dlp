@@ -1,0 +1,171 @@
+package codegeneration;
+
+import ast.Expression;
+import ast.Type;
+import ast.definitions.VarDefinition;
+import ast.expressions.Variable;
+import ast.types.CharType;
+import ast.types.DoubleType;
+
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class CodeGenerator {
+    private FileWriter outputFile;
+    private int labels = 1;
+
+    public String nextLabel(){
+        return "label" + this.labels++;
+    }
+
+    public CodeGenerator(String fileName){
+        try {
+            this.outputFile = new FileWriter(fileName);
+        } catch (IOException e){
+            //TODO
+        }
+    }
+
+    private void writeLine(String line){
+        try {
+            outputFile.write(line + "\n");
+        } catch (IOException e) {
+            //TODO
+        }
+    }
+
+    public void pushAddress(VarDefinition vardef) {
+        if (vardef.getScope() > 0){
+            writeLine("\tpush bp");
+            writeLine("\tpushi " + vardef.getOffset());
+            writeLine("\taddi");
+        } else
+            writeLine("\tpusha " + vardef.getOffset());
+    }
+
+    public void pushByte(int value) {
+        writeLine("\tpushb " + value);
+    }
+
+    public void pushFloat(double value) {
+        writeLine("\tpushf " + value);
+    }
+
+    public void pushInt(int value) {
+        writeLine("\tpushi " + value);
+    }
+
+    public void load(Variable variable) {
+        writeLine("load" + variable.getType().suffix());
+    }
+
+    public void convert(Type from, Type to) {
+        if (!from.equals(to)) {
+            if (to instanceof CharType) convertToChar(from);
+            else if (to instanceof DoubleType) convertToDouble(from);
+            else writeLine(from.suffix() + "2" + to.suffix());
+        }
+    }
+
+    private void convertToDouble(Type from) {
+        if (from instanceof CharType)
+            writeLine("b2i");
+        writeLine("i2f");
+    }
+
+    private void convertToChar(Type from) {
+        if (from instanceof DoubleType)
+            writeLine("f2i");
+        writeLine("i2b");
+    }
+
+    public void arithmetic(String operator, Type type) {
+        String op = "";
+        switch (operator){
+            case "+":
+                op = "add"; //TODO chars?
+                break;
+            case "-":
+                op = "sub";
+                break;
+            case "*":
+                op = "mul";
+                break;
+            case "/":
+                op = "div";
+                break;
+            default:
+                //TODO
+                break;
+        }
+        String suffix = type.suffix();
+        if (suffix.equals("b"))
+            suffix = "i";
+        writeLine(op + suffix);
+    }
+
+    public void charToInt(Type type) {
+        if (type instanceof CharType)
+            writeLine("b2i");
+    }
+
+    public void compare(String operand, Type type) {
+        String compare = "";
+        switch (operand){
+            case ">":
+                compare = "gt";
+                break;
+            case ">=":
+                compare = "ge";
+                break;
+            case "<":
+                compare = "lt";
+                break;
+            case "<=":
+			    compare = "le";
+                break;
+            case "!=":
+                compare = "ne";
+                break;
+            case "==":
+                compare = "eq";
+                break;
+            default:
+                //TODO
+        }
+        String suffix = type.suffix();
+        if (suffix.equals("b"))
+            suffix = "i";
+        writeLine(compare + suffix);
+    }
+
+    public void logical(String operand) {
+        switch (operand){
+            case "&&":
+			    writeLine("and");
+                break;
+            case "||":
+			    writeLine("or");
+                break;
+            default:
+                //TODO
+        }
+    }
+
+    public void modulus() {
+        writeLine("modi");
+    }
+
+    public void negate() {
+        writeLine("not");
+    }
+
+    public void read(Type type) {
+        writeLine("in" + type.suffix());
+        writeLine("store" + type.suffix());
+    }
+
+    public void write(Type type) {
+        writeLine("out" + type.suffix());
+    }
+}

@@ -22,4 +22,6 @@ public interface Type extends ASTNode {
     Type parenthesis(List<Type> argTypes, int line, int column);
 
     int numberOfBytes();
+
+    String suffix();
 }
