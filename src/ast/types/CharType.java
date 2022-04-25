@@ -100,4 +100,9 @@ public class CharType extends AbstractType {
     public int numberOfBytes() {
         return 1;
     }
+
+    @Override
+    public String suffix() {
+        return "b";
+    }
 }

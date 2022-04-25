@@ -39,7 +39,11 @@ import ast.definitions.VarDefinition;
 import ast.statements.Assignment;
 import ast.statements.Read;
 import ast.statements.Write;
+import ast.types.FunctionType;
 import semantic.Visitor;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ExecuteCGVisitor extends AbstractCGVisitor<Void,Void> {
     private Visitor<Void,Void> address;
@@ -53,35 +57,58 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void,Void> {
 
     @Override
     public Void visit(Program program, Void param) {
-        return super.visit(program, param);
-    }
 
-    @Override
-    public Void visit(FuncDefinition funcDefinition, Void param) {
-        return super.visit(funcDefinition, param);
-    }
+        cg.generateComment("Global variables:");
 
-    @Override
-    public Void visit(VarDefinition varDefinition, Void param) {
-        return super.visit(varDefinition, param);
-    }
-
-    /*
-    * address[[expression1]]
-		value[[expression2]]
-		< store > expression1.type.suffix()*/
-    @Override
-    public Void visit(Assignment assign, Void param) {
-
-        assign.getLeft().accept(address, null);
-        assign.getRight().accept(value, null);
-        //TODO
+        program.getDefinitions().forEach(def -> def.accept(this, null));
 
         return null;
     }
 
     @Override
+    public Void visit(FuncDefinition funcDefinition, Void param) {
+
+        cg.newFunction(funcDefinition);
+
+        cg.generateComment("Parameters:");
+        funcDefinition.getType().accept(this, null);
+
+        cg.generateComment("Local variables:");
+        List<VarDefinition> vardefs = funcDefinition.getVarDefinitions();
+        vardefs.forEach(vd -> vd.accept(this, null));
+        if (vardefs.size() > 0)
+            cg.allocateMemory(vardefs);
+
+        funcDefinition.getBody().stream().filter(s -> !(s instanceof VarDefinition)).forEach(st -> st.accept(this, null));
+
+        return null;
+    }
+
+    @Override
+    public Void visit(VarDefinition varDefinition, Void param) {
+
+        cg.commentVariable(varDefinition);
+
+        return null;
+    }
+
+
+    @Override
+    public Void visit(Assignment assign, Void param) {
+
+        cg.writeLineNumber(assign.getLine());
+
+        assign.getLeft().accept(address, null);
+        assign.getRight().accept(value, null);
+
+        cg.store(assign.getLeft().getType());
+        return null;
+    }
+
+    @Override
     public Void visit(Read readSt, Void param) {
+
+        cg.writeLineNumber(readSt.getLine());
 
         readSt.getArgument().accept(address, null);
         cg.read(readSt.getArgument().getType());
@@ -92,9 +119,17 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void,Void> {
     @Override
     public Void visit(Write writeSt, Void param) {
 
+        cg.writeLineNumber(writeSt.getLine());
+
         writeSt.getArgument().accept(value, null);
         cg.write(writeSt.getArgument().getType());
 
+        return null;
+    }
+
+    @Override
+    public Void visit(FunctionType functionType, Void param) {
+        //TODO
         return null;
     }
 }

@@ -47,4 +47,15 @@ public class FuncDefinition extends AbstractDefinition {
     public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
         return visitor.visit(this, param);
     }
+
+    public List<VarDefinition> getVarDefinitions() {
+        List<VarDefinition> vardefs = new ArrayList<>();
+
+        for (Statement st: body) {
+            if (st instanceof VarDefinition)
+                vardefs.add((VarDefinition) st);
+        }
+
+        return vardefs;
+    }
 }

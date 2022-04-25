@@ -184,6 +184,7 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(Cast cast, Void param) {
 
+        cast.getExpression().accept(this, null);
         cg.convert(cast.getExpression().getType(), cast.getCastType());
 
         return null;

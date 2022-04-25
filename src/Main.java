@@ -1,6 +1,6 @@
 import ast.Program;
 import ast.errorhandler.ErrorHandler;
-import codegeneration.OffsetVisitor;
+import codegeneration.*;
 import introspector.model.IntrospectorModel;
 import introspector.view.IntrospectorTree;
 import org.antlr.v4.runtime.CharStream;
@@ -44,10 +44,15 @@ public class Main {
         if (ErrorHandler.getInstance().anyErrors())
             ErrorHandler.getInstance().showErrors(System.err);
         else {
-            // * The AST is shown
-            IntrospectorModel model=new IntrospectorModel(
-                    "Program", ast);
-            new IntrospectorTree("Introspector", model);
+//            // * The AST is shown
+//            IntrospectorModel model=new IntrospectorModel(
+//                    "Program", ast);
+//            new IntrospectorTree("Introspector", model);
+            CodeGenerator cg = new CodeGenerator("output.txt", args[0]);
+            AddressCGVisitor addressCGVisitor = new AddressCGVisitor(cg);
+            visitor = new ExecuteCGVisitor(cg, addressCGVisitor, new ValueCGVisitor(cg, addressCGVisitor));
+            visitor.visit(ast, null);
+            cg.writeToFile();
         }
     }
 

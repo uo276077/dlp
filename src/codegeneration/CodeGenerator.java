@@ -2,6 +2,7 @@ package codegeneration;
 
 import ast.Expression;
 import ast.Type;
+import ast.definitions.FuncDefinition;
 import ast.definitions.VarDefinition;
 import ast.expressions.Variable;
 import ast.types.CharType;
@@ -9,6 +10,7 @@ import ast.types.DoubleType;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 
 public class CodeGenerator {
     private FileWriter outputFile;
@@ -18,9 +20,10 @@ public class CodeGenerator {
         return "label" + this.labels++;
     }
 
-    public CodeGenerator(String fileName){
+    public CodeGenerator(String fileName, String sourceName){
         try {
-            this.outputFile = new FileWriter(fileName);
+            this.outputFile = new FileWriter(fileName, true);
+            writeLineNoTab(String.format("#source\t\"%s\"\n", sourceName));
         } catch (IOException e){
             //TODO
         }
@@ -28,31 +31,43 @@ public class CodeGenerator {
 
     private void writeLine(String line){
         try {
-            outputFile.write(line + "\n");
+            outputFile.write("\t" + line + "\n");
         } catch (IOException e) {
             //TODO
         }
     }
 
+    private void writeLineNoTab(String line) {
+        try {
+            outputFile.write("\n" + line + "\n");
+        } catch (IOException e) {
+            //TODO
+        }
+    }
+
+    public void writeLineNumber(int line) {
+        writeLineNoTab("#line\t" + line);
+    }
+
     public void pushAddress(VarDefinition vardef) {
         if (vardef.getScope() > 0){
-            writeLine("\tpush bp");
-            writeLine("\tpushi " + vardef.getOffset());
-            writeLine("\taddi");
+            writeLine("push bp");
+            writeLine("pushi " + vardef.getOffset());
+            writeLine("addi");
         } else
-            writeLine("\tpusha " + vardef.getOffset());
+            writeLine("pusha " + vardef.getOffset());
     }
 
     public void pushByte(int value) {
-        writeLine("\tpushb " + value);
+        writeLine("pushb " + value);
     }
 
     public void pushFloat(double value) {
-        writeLine("\tpushf " + value);
+        writeLine("pushf " + value);
     }
 
     public void pushInt(int value) {
-        writeLine("\tpushi " + value);
+        writeLine("pushi " + value);
     }
 
     public void load(Variable variable) {
@@ -167,5 +182,34 @@ public class CodeGenerator {
 
     public void write(Type type) {
         writeLine("out" + type.suffix());
+    }
+
+    public void store(Type type) {
+        writeLine("store" + type.suffix());
+    }
+
+    public void commentVariable(VarDefinition varDefinition) {
+        writeLine(String.format("' * %s %s (offset %d)",
+                varDefinition.getType(), varDefinition.getName(), varDefinition.getOffset()));
+    }
+
+    public void newFunction(FuncDefinition funcDefinition) {
+        writeLineNumber(funcDefinition.getLine());
+        writeLineNoTab(String.format(" %s :", funcDefinition.getName()));
+    }
+
+    public void generateComment(String comment) {
+        writeLine(String.format("' * %s", comment));
+    }
+
+    public void allocateMemory(List<VarDefinition> vardefs) {
+        writeLine(String.format("enter %d", Math.abs(vardefs.get(vardefs.size()-1).getOffset())));
+    }
+
+    public void writeToFile() {
+        try {
+            outputFile.flush();
+            outputFile.close();
+        } catch (IOException e){}
     }
 }
