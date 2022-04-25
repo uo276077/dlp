@@ -43,7 +43,6 @@ import ast.types.FunctionType;
 import semantic.Visitor;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ExecuteCGVisitor extends AbstractCGVisitor<Void,Void> {
     private Visitor<Void,Void> address;
@@ -62,6 +61,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void,Void> {
 
         program.getDefinitions().forEach(def -> def.accept(this, null));
 
+        cg.writeToFile();
         return null;
     }
 
@@ -80,6 +80,11 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void,Void> {
             cg.allocateMemory(vardefs);
 
         funcDefinition.getBody().stream().filter(s -> !(s instanceof VarDefinition)).forEach(st -> st.accept(this, null));
+
+        //bytes to return, bytes local variables, bytes arguments
+        cg.ret(funcDefinition.getBody().get(0).getReturnType().numberOfBytes(),
+                vardefs.size()>0 ? Math.abs(vardefs.get(vardefs.size()-1).getOffset()) : 0,
+                0); //TODO function type ??
 
         return null;
     }

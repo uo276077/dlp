@@ -52,7 +52,7 @@ public class Main {
             AddressCGVisitor addressCGVisitor = new AddressCGVisitor(cg);
             visitor = new ExecuteCGVisitor(cg, addressCGVisitor, new ValueCGVisitor(cg, addressCGVisitor));
             visitor.visit(ast, null);
-            cg.writeToFile();
+
         }
     }
 
