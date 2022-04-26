@@ -99,4 +99,11 @@ public class DoubleType extends AbstractType {
     public String suffix() {
         return "f";
     }
+
+    @Override
+    public Type superType(Type type) {
+        if (type instanceof DoubleType)
+            return this;
+        return null;
+    }
 }

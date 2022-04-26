@@ -24,4 +24,6 @@ public interface Type extends ASTNode {
     int numberOfBytes();
 
     String suffix();
+
+    Type superType(Type type);
 }

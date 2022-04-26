@@ -135,4 +135,9 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     public String suffix() {
         return null; //TODO
     }
+
+    @Override
+    public Type superType(Type type) {
+        return null; //TODO
+    }
 }

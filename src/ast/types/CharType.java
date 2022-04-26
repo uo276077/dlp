@@ -105,4 +105,11 @@ public class CharType extends AbstractType {
     public String suffix() {
         return "b";
     }
+
+    @Override
+    public Type superType(Type type) {
+        if (type instanceof IntType)
+            return type;
+        return this;
+    }
 }

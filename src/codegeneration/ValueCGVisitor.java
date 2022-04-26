@@ -2,19 +2,19 @@ package codegeneration;
 
 /*
 value[[ IntLiteral: expression -> INT_CONSTANT ]] =
-		< pushi > INT_CONSTANT
+		<pushi> INT_CONSTANT
 
 value[[ CharLiteral: expression -> CHAR_CONSTANT ]] =
-		< pushb > CHAR_CONSTANT
+		<pushb> CHAR_CONSTANT
 
 
 value[[ DoubleLiteral: expression -> REAL_CONSTANT ]] =
-		< pushf > REAL_CONSTANT
+		<pushf> REAL_CONSTANT
 
 
 value[[ Variable: expression -> ID ]] =
 		address[[ expression ]]
-		< load > expression.type.suffix()
+		<load> expression.type.suffix()
 
 value[[ Arithmetic: expression1 -> expression2 expression3 ]] =
 		value[[expression2]]
@@ -25,44 +25,46 @@ value[[ Arithmetic: expression1 -> expression2 expression3 ]] =
 
 		switch (expression1.operator) {
 		case "+":
-			< add > expression1.type.suffix()
+			<add> expression1.type.suffix()
 			break;
 		case "-":
-			< sub > expression1.type.suffix()
+			<sub> expression1.type.suffix()
 			break;
 		case "*":
-			< mul > expression1.type.suffix()
+			<mul> expression1.type.suffix()
 			break;
 		case "/":
-			< div > expression1.type.suffix()
+			<div> expression1.type.suffix()
 			break;
 		default:
 			//error
 		}
 
 value[[ Comparison: expression1 -> expression2 expression3 ]] =
+        Type superType = expression1.type.superType(expression2.type);
 		value[[expression2]] //type checking has checked that they are the same type(?)
-		expression2.type.charToInt()
+		expression2.type.convertTo(superType)
 		value[[expression3]]
-		expression3.type.charToInt()
+		expression3.type.convertTo(superType)
+		// (superType: new responsibility, take two types and return the "greater" one)
 		switch (expression1.operator) {
 		case ">":
-			< gt > expression2.type.suffix()
+			<gt> superType.suffix()
 			break;
 		case ">=":
-			< ge > expression2.type.suffix()
+			<ge> superType.suffix()
 			break;
 		case "<":
-			< lt > expression2.type.suffix()
+			<lt> superType.suffix()
 			break;
 		case "<=":
-			< le > expression2.type.suffix()
+			<le> superType.suffix()
 			break;
 		case "!=":
-			< ne > expression2.type.suffix()
+			<ne> superType.suffix()
 			break;
 		case "==":
-			< eq > expression2.type.suffix()
+			<eq> superType.suffix()
 			break;
 		default:
 			//error
@@ -74,10 +76,10 @@ value[[ Logical: expression1 -> expression2 expression3 ]] =
 
 		switch (expression1.operator) {
 		case "&&":
-			< and >
+			<and>
 			break;
 		case "||":
-			< or >
+			<or>
 			break;
 		default:
 			//error
@@ -102,8 +104,17 @@ value[[ Modulus: expression1 -> expression2 expression3 ]] =
         value[[expression3]]
         < mod >
 
+value[[Indexing: expression1 -> expression2 expression3]] =
+		address[[expression1]]
+		<load> expression1.type.suffix()
+
+value[[FieldAccess: expression1 -> expression2 ID]] =
+		address[[expression1]]
+		<load> expression1.type.suffix()
+
 */
 
+import ast.Type;
 import ast.expressions.*;
 import ast.expressions.literals.CharLiteral;
 import ast.expressions.literals.DoubleLiteral;
@@ -170,13 +181,16 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(Comparison comparison, Void param) {
 
+        // (superType: new responsibility, take two types and return the "greater" one)
+        Type superType = comparison.getType().superType(comparison.getOp1().getType());
+
         comparison.getOp1().accept(this, null);
-        cg.charToInt(comparison.getOp1().getType());
+        cg.convert(comparison.getOp1().getType(), superType);
 
         comparison.getOp2().accept(this, null);
-        cg.charToInt(comparison.getOp2().getType());
+        cg.convert(comparison.getOp2().getType(), superType);
 
-        cg.compare(comparison.getOperand(), comparison.getType());
+        cg.compare(comparison.getOperand(), superType);
 
         return null;
     }
@@ -223,6 +237,16 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
         unaryNot.getExpression().accept(this, null);
         cg.negate();
 
+        return null;
+    }
+
+    @Override
+    public Void visit(FieldAccess fieldAccess, Void param) {
+        return null;
+    }
+
+    @Override
+    public Void visit(Indexing indexing, Void param) {
         return null;
     }
 }

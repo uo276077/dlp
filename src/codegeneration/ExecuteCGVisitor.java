@@ -31,14 +31,33 @@ execute[[ FuncDefinition: funcdefinition -> type ID vardefinition* statement* ]]
 
 execute[[VarDefinition: vardefinition -> type ID]] =
                    < ' * > type.toString() ID < ( offset > vardefinition.offset < ) >
+
+execute[[While: statement1 -> expression statement2*]] =
+		String conditionLabel = cg.nextLabel(),
+			exitLabel = cg.nextLabel();
+		conditionLabel <:>
+		value[[expression]]
+		<jz > exitLabel
+		statement2*.forEach(stmt -> execute[[stmt]])
+		<jmp > conditionLabel
+		exitLabel <:>
+
+execute[[IfElse: statement1 -> expression statement2* statement3*]] =
+		String elseLabel = cg.nextLabel(),
+				exitLabel = cg.nextLabel();
+		value[[expression]]
+		<jz > elseLabel
+		statement2*.forEach(stmt -> execute[[stmt]])
+		<jmp > exitLabel
+		elseLabel <:>
+		statement3*.forEach(stmt -> execute[[stmt]])
+		exitLabel <:>
  */
 
 import ast.Program;
 import ast.definitions.FuncDefinition;
 import ast.definitions.VarDefinition;
-import ast.statements.Assignment;
-import ast.statements.Read;
-import ast.statements.Write;
+import ast.statements.*;
 import ast.types.FunctionType;
 import semantic.Visitor;
 
@@ -59,9 +78,12 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void,Void> {
 
         cg.generateComment("Global variables:");
 
+        cg.finishProgram(); //TODO
+
         program.getDefinitions().forEach(def -> def.accept(this, null));
 
-        cg.finishProgram();
+
+        cg.writeToFile();
         return null;
     }
 
@@ -76,15 +98,24 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void,Void> {
         cg.generateComment("Local variables:");
         List<VarDefinition> vardefs = funcDefinition.getVarDefinitions();
         vardefs.forEach(vd -> vd.accept(this, null));
-        if (vardefs.size() > 0)
-            cg.allocateMemory(vardefs);
+
+        int bytesLocal = vardefs.size() > 0
+                        ? - vardefs.get(vardefs.size()-1).getOffset()
+                        : 0;
+        if (bytesLocal > 0)
+            cg.allocateMemory(bytesLocal);
+
+        int bytesReturn = funcDefinition.getBody().get(0).getReturnType().numberOfBytes();
+        int bytesParams = funcDefinition.getType().numberOfBytes(); //TODO
 
         funcDefinition.getBody().stream().filter(s -> !(s instanceof VarDefinition)).forEach(st -> st.accept(this, null));
 
-        //bytes to return, bytes local variables, bytes arguments
-        cg.ret(funcDefinition.getBody().get(0).getReturnType().numberOfBytes(),
-                vardefs.size()>0 ? Math.abs(vardefs.get(vardefs.size()-1).getOffset()) : 0,
-                0); //TODO function type ??
+        //check if it has a return already, if not -> we add a ret
+        if (bytesReturn == 0)
+            //bytes to return, bytes local variables, bytes arguments
+            cg.ret(bytesReturn,
+                    bytesLocal,
+                    bytesParams);
 
         return null;
     }
@@ -135,6 +166,43 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void,Void> {
     @Override
     public Void visit(FunctionType functionType, Void param) {
         //TODO
+        return null;
+    }
+
+    @Override
+    public Void visit(IfElse ifElse, Void param) {
+
+        String elseLabel = cg.nextLabel(),
+                exitLabel = cg.nextLabel();
+
+        ifElse.getCondition().accept(value, null);
+        cg.jumpConditionally(elseLabel, true);
+        ifElse.getIfBody().forEach(stmt -> stmt.accept(this, null));
+        cg.jump(exitLabel);
+
+        ifElse.getElseBody().forEach(stmt -> stmt.accept(this, null));
+
+        cg.generateLabel(exitLabel);
+
+        return null;
+    }
+
+    @Override
+    public Void visit(While whileSt, Void param) {
+
+        String conditionLabel = cg.nextLabel(),
+                exitLabel = cg.nextLabel();
+
+        cg.generateLabel(conditionLabel);
+
+        whileSt.getCondition().accept(value, null);
+        cg.jumpConditionally(exitLabel, true);
+
+        whileSt.getBody().forEach(stmt -> stmt.accept(this, null));
+        cg.jump(conditionLabel);
+
+        cg.generateLabel(exitLabel);
+
         return null;
     }
 }

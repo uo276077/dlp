@@ -131,4 +131,13 @@ public class IntType extends AbstractType {
     public String suffix() {
         return "i";
     }
+
+    @Override
+    public Type superType(Type type) {
+        if (type instanceof IntType)
+            return this;
+        if (type instanceof DoubleType)
+            return type;
+        return null;
+    }
 }

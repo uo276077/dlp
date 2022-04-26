@@ -14,7 +14,7 @@ import java.util.List;
 
 public class CodeGenerator {
     private FileWriter outputFile;
-    private int labels = 1;
+    private int labels = 0;
 
     public String nextLabel(){
         return "label" + this.labels++;
@@ -202,8 +202,8 @@ public class CodeGenerator {
         writeLine(String.format("' * %s", comment));
     }
 
-    public void allocateMemory(List<VarDefinition> vardefs) {
-        writeLine(String.format("enter %d", Math.abs(vardefs.get(vardefs.size()-1).getOffset())));
+    public void allocateMemory(int memory) {
+        writeLine(String.format("enter %d", memory));
     }
 
     public void writeToFile() {
@@ -220,6 +220,20 @@ public class CodeGenerator {
     public void finishProgram() {
         writeLineNoTab("call main");
         writeLineNoTab("halt");
-        writeToFile();
+    }
+
+    public void generateLabel(String conditionLabel) {
+        writeLineNoTab(" " + conditionLabel + ":");
+    }
+
+    public void jumpConditionally(String exitLabel, boolean zero) {
+        if (zero)
+            writeLine("jz " + exitLabel);
+        else
+            writeLine("jnz " + exitLabel);
+    }
+
+    public void jump(String conditionLabel) {
+        writeLine("jmp " + conditionLabel);
     }
 }
