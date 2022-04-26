@@ -61,7 +61,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void,Void> {
 
         program.getDefinitions().forEach(def -> def.accept(this, null));
 
-        cg.writeToFile();
+        cg.finishProgram();
         return null;
     }
 

@@ -216,4 +216,10 @@ public class CodeGenerator {
     public void ret(int returnBytes, int localVariablesBytes, int argumentsBytes) {
         writeLine(String.format("ret %d %d %d", returnBytes, localVariablesBytes, argumentsBytes));
     }
+
+    public void finishProgram() {
+        writeLineNoTab("call main");
+        writeLineNoTab("halt");
+        writeToFile();
+    }
 }
