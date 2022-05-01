@@ -26,8 +26,15 @@ import ast.definitions.VarDefinition;
 import ast.expressions.FieldAccess;
 import ast.expressions.Indexing;
 import ast.expressions.Variable;
+import ast.types.StructType;
 
 public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
+
+    private ValueCGVisitor value;
+
+    public void setValueVisitor(ValueCGVisitor value){
+        this.value = value;
+    }
 
     public AddressCGVisitor(CodeGenerator cg) {
         super(cg);
@@ -43,11 +50,23 @@ public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
 
     @Override
     public Void visit(FieldAccess fieldAccess, Void param) {
+
+        fieldAccess.getStruct().accept(this, null);
+        cg.pushInt(((StructType)fieldAccess.getStruct().getType()).getField(fieldAccess.getField()).getOffset());
+        cg.addIntegers();
+
         return null;
     }
 
     @Override
     public Void visit(Indexing indexing, Void param) {
+
+        indexing.getArray().accept(this, null);
+        indexing.getIndex().accept(value, null);
+        cg.pushInt(indexing.getType().numberOfBytes());
+        cg.multiplyIntegers();
+        cg.addIntegers();
+
         return null;
     }
 }

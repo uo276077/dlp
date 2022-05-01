@@ -70,35 +70,19 @@ public class CodeGenerator {
         writeLine("pushi " + value);
     }
 
-    public void load(Variable variable) {
-        writeLine("load" + variable.getType().suffix());
+    public void load(Type type) {
+        writeLine("load" + type.suffix());
     }
 
     public void convert(Type from, Type to) {
-        if (!from.equals(to)) {
-            if (to instanceof CharType) convertToChar(from);
-            else if (to instanceof DoubleType) convertToDouble(from);
-            else writeLine(from.suffix() + "2" + to.suffix());
-        }
-    }
-
-    private void convertToDouble(Type from) {
-        if (from instanceof CharType)
-            writeLine("b2i");
-        writeLine("i2f");
-    }
-
-    private void convertToChar(Type from) {
-        if (from instanceof DoubleType)
-            writeLine("f2i");
-        writeLine("i2b");
+        writeLine(from.convertTo(to));
     }
 
     public void arithmetic(String operator, Type type) {
         String op = "";
         switch (operator){
             case "+":
-                op = "add"; //TODO chars?
+                op = "add";
                 break;
             case "-":
                 op = "sub";
@@ -114,8 +98,6 @@ public class CodeGenerator {
                 break;
         }
         String suffix = type.suffix();
-        if (suffix.equals("b"))
-            suffix = "i";
         writeLine(op + suffix);
     }
 
@@ -149,8 +131,6 @@ public class CodeGenerator {
                 //TODO
         }
         String suffix = type.suffix();
-        if (suffix.equals("b"))
-            suffix = "i";
         writeLine(compare + suffix);
     }
 
@@ -214,12 +194,11 @@ public class CodeGenerator {
     }
 
     public void ret(int returnBytes, int localVariablesBytes, int argumentsBytes) {
-        writeLine(String.format("ret %d %d %d", returnBytes, localVariablesBytes, argumentsBytes));
+        writeLine(String.format("ret %d, %d, %d", returnBytes, localVariablesBytes, argumentsBytes));
     }
 
     public void finishProgram() {
-        writeLineNoTab("call main");
-        writeLineNoTab("halt");
+        writeLineNoTab("call main\nhalt");
     }
 
     public void generateLabel(String conditionLabel) {
@@ -235,5 +214,13 @@ public class CodeGenerator {
 
     public void jump(String conditionLabel) {
         writeLine("jmp " + conditionLabel);
+    }
+
+    public void addIntegers() {
+        writeLine("addi");
+    }
+
+    public void multiplyIntegers() {
+        writeLine("muli");
     }
 }

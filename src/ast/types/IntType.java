@@ -134,10 +134,19 @@ public class IntType extends AbstractType {
 
     @Override
     public Type superType(Type type) {
-        if (type instanceof IntType)
+        if (type instanceof IntType || type instanceof CharType)
             return this;
         if (type instanceof DoubleType)
             return type;
+        return null;
+    }
+
+    @Override
+    public String convertTo(Type to) {
+        if (to instanceof DoubleType)
+            return "i2f";
+        if (to instanceof CharType)
+            return "i2b";
         return null;
     }
 }

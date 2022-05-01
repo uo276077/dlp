@@ -102,8 +102,17 @@ public class DoubleType extends AbstractType {
 
     @Override
     public Type superType(Type type) {
-        if (type instanceof DoubleType)
+        if (type instanceof DoubleType || type instanceof IntType || type instanceof CharType)
             return this;
+        return null;
+    }
+
+    @Override
+    public String convertTo(Type to) {
+        if (to instanceof IntType)
+            return "f2i";
+        if (to instanceof CharType)
+            return "f2i\n\ti2b";
         return null;
     }
 }

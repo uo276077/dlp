@@ -26,4 +26,6 @@ public interface Type extends ASTNode {
     String suffix();
 
     Type superType(Type type);
+
+    String convertTo(Type to);
 }

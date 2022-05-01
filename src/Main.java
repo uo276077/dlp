@@ -50,7 +50,9 @@ public class Main {
 //            new IntrospectorTree("Introspector", model);
             CodeGenerator cg = new CodeGenerator("output.txt", args[0]);
             AddressCGVisitor addressCGVisitor = new AddressCGVisitor(cg);
-            visitor = new ExecuteCGVisitor(cg, addressCGVisitor, new ValueCGVisitor(cg, addressCGVisitor));
+            ValueCGVisitor valueCGVisitor = new ValueCGVisitor(cg, addressCGVisitor);
+            addressCGVisitor.setValueVisitor(valueCGVisitor);
+            visitor = new ExecuteCGVisitor(cg, addressCGVisitor, valueCGVisitor);
             visitor.visit(ast, null);
 
         }

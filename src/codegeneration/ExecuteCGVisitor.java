@@ -78,10 +78,11 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void,Void> {
 
         cg.generateComment("Global variables:");
 
-        cg.finishProgram(); //TODO
+        program.getGlobalVariables().forEach(def -> def.accept(this, null));
 
-        program.getDefinitions().forEach(def -> def.accept(this, null));
+        cg.finishProgram();
 
+        program.getFuncDefinitions().forEach(def -> def.accept(this, null));
 
         cg.writeToFile();
         return null;
@@ -180,6 +181,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void,Void> {
         ifElse.getIfBody().forEach(stmt -> stmt.accept(this, null));
         cg.jump(exitLabel);
 
+        cg.generateLabel(elseLabel);
         ifElse.getElseBody().forEach(stmt -> stmt.accept(this, null));
 
         cg.generateLabel(exitLabel);

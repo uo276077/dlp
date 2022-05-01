@@ -158,7 +158,7 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     public Void visit(Variable variable, Void param) {
 
         variable.accept(address, null);
-        cg.load(variable);
+        cg.load(variable.getType());
 
         return null;
     }
@@ -167,13 +167,15 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(Arithmetic arith, Void param) {
 
+        Type superType = arith.getType().superType(arith.getLeft().getType());
+
         arith.getLeft().accept(this, null);
-        cg.convert(arith.getLeft().getType(), arith.getType());
+        cg.convert(arith.getLeft().getType(), superType);
 
         arith.getRight().accept(this, null);
-        cg.convert(arith.getRight().getType(), arith.getType());
+        cg.convert(arith.getRight().getType(), superType);
 
-        cg.arithmetic(arith.getOperator(), arith.getType());
+        cg.arithmetic(arith.getOperator(), superType);
 
         return null;
     }
@@ -228,6 +230,7 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
     @Override
     public Void visit(UnaryMinus unaryMinus, Void param) {
+        //TODO
         return null;
     }
 
@@ -242,11 +245,19 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
     @Override
     public Void visit(FieldAccess fieldAccess, Void param) {
+
+        fieldAccess.accept(address, null);
+        cg.load(fieldAccess.getType());
+
         return null;
     }
 
     @Override
     public Void visit(Indexing indexing, Void param) {
+
+        indexing.accept(address, null);
+        cg.load(indexing.getType());
+
         return null;
     }
 }

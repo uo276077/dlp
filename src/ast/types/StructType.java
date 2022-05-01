@@ -1,12 +1,10 @@
 package ast.types;
 
-import ast.AbstractASTNode;
 import ast.Type;
 import semantic.Visitor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class StructType extends AbstractType {
 
@@ -34,8 +32,8 @@ public class StructType extends AbstractType {
     }
 
     private String fieldsToString() {
-        String res = "\n";
-        String sep = "\n";
+        String res = "";
+        String sep = " ";
         for (StructField f: fields) {
             res += f.toString() + ";" + sep;
         }
@@ -61,5 +59,13 @@ public class StructType extends AbstractType {
     @Override
     public int numberOfBytes() {
         return fields.stream().mapToInt(sf -> sf.getType().numberOfBytes()).sum();
+    }
+
+    public StructField getField(String field) {
+        for (StructField sf: fields) {
+            if (sf.getName().equals(field))
+                return sf;
+        }
+        return null;
     }
 }

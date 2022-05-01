@@ -2,192 +2,374 @@
 #source	"input.txt"
 
 	' * Global variables:
-	' * char c (offset 0)
-	' * int a (offset 1)
-	' * double r (offset 3)
+	' * [10]double v (offset 0)
 
-#line	5
+call main
+halt
+
+#line	4
 
  main :
 	' * Parameters:
 	' * Local variables:
-	' * int a (offset -2)
-	' * int i (offset -4)
-	enter 4
+	' * double value (offset -4)
+	' * int i (offset -6)
+	' * int j (offset -8)
+	' * [4][5]int w (offset -48)
+	' * struct {int day; int month; int year; } date (offset -54)
+	enter 54
 
-#line	8
-	pusha 0
+#line	13
+	push bp
+	pushi -54
+	addi
+	pushi 0
+	addi
+	ini
+	storei
+
+#line	14
+	push bp
+	pushi -54
+	addi
+	pushi 4
+	addi
 	pushb 97
-	storeb
-
-#line	9
-	pusha 0
-	loadb
-	outb
-
-#line	9
-	pushb 10
-	outb
-
-#line	11
-	push bp
-	pushi -2
-	addi
-	pushi 1
-	storei
-
-#line	12
-	push bp
-	pushi -4
-	addi
-	pushb 48
 	b2i
-	pushi 3
-	muli
 	storei
-
-#line	13
-	push bp
-	pushi -2
-	addi
-	loadi
-	outi
-
-#line	13
-	pushb 32
-	outb
-
-#line	13
-	push bp
-	pushi -4
-	addi
-	loadi
-	outi
-
-#line	13
-	pushb 10
-	outb
 
 #line	15
-	pusha 3
+	push bp
+	pushi -54
+	addi
+	pushi 2
+	addi
+	push bp
+	pushi -54
+	addi
+	pushi 0
+	addi
+	loadi
+	null
+	push bp
+	pushi -54
+	addi
+	pushi 4
+	addi
+	loadi
+	null
+	muli
+	pushi 12
+	modi
+	null
+	pushi 1
+	null
+	addi
+	storei
+
+#line	16
+	push bp
+	pushi -54
+	addi
+	pushi 0
+	addi
+	loadi
+	outi
+
+#line	16
+	pushb 10
+	outb
+
+#line	16
+	push bp
+	pushi -54
+	addi
+	pushi 2
+	addi
+	loadi
+	outi
+
+#line	16
+	pushb 10
+	outb
+
+#line	16
+	push bp
+	pushi -54
+	addi
+	pushi 4
+	addi
+	loadi
+	i2f
+	outf
+
+#line	16
+	pushb 10
+	outb
+
+#line	18
+	push bp
+	pushi -4
+	addi
 	inf
 	storef
 
-#line	16
-	pushi 2
-	i2f
-	pusha 3
-	loadf
-	mulf
-	outf
-
-#line	16
-	pushb 10
-	outb
-
-#line	18
-	pushi 3
-	i2f
-	pushf 4.5
-	subf
-	outf
-
-#line	18
-	pushb 32
-	outb
-
-#line	19
-	pushb 48
-	b2i
-	i2f
-	pushf 48.0
-	divf
-	outf
-
-#line	19
-	pushb 32
-	outb
-
 #line	20
-	pushb 48
-	pushb 49
-	modi
-	outi
-
-#line	20
-	pushb 32
-	outb
-
-#line	21
-	pushb 48
-	pushb 49
+	push bp
+	pushi -6
 	addi
-	outb
+	pushi 0
+	storei
 
-#line	21
-	pushb 10
-	outb
-
-#line	22
-	pushi 1
-	pushi 2
+ label0:
+	push bp
+	pushi -6
+	addi
+	loadi
+	null
+	pushi 10
+	null
 	lti
-	outi
+	jz label1
 
 #line	22
-	pushb 32
-	outb
-
-#line	23
+	pusha 0
+	push bp
+	pushi -6
+	addi
+	loadi
 	pushi 4
-	pushi 3
-	gei
+	muli
+	addi
+	push bp
+	pushi -4
+	addi
+	loadf
+	storef
+
+#line	23
+	push bp
+	pushi -6
+	addi
+	loadi
 	outi
+
+#line	23
+	pushb 58
+	outb
+
+#line	23
+	pusha 0
+	push bp
+	pushi -6
+	addi
+	loadi
+	pushi 4
+	muli
+	addi
+	loadf
+	outf
 
 #line	23
 	pushb 32
 	outb
-
-#line	24
-	pushi 5
-	pushi 5
-	eqi
-	outi
-
-#line	24
-	pushb 32
-	outb
-
-#line	25
-	pushi 1
+	push bp
+	pushi -6
+	addi
+	loadi
 	pushi 2
-	and
-	outi
+	modi
+	jz label2
 
 #line	25
-	pushb 32
+	pushb 111
 	outb
 
-#line	26
-	pushi 0
-	pushi 3
-	or
-	outi
+#line	25
+	pushb 100
+	outb
 
-#line	26
-	pushb 32
+#line	25
+	pushb 100
+	outb
+
+#line	25
+	pushb 10
+	outb
+	jmp label3
+
+ label2:
+
+#line	27
+	pushb 101
 	outb
 
 #line	27
-	pushi 0
-	not
-	outi
+	pushb 118
+	outb
+
+#line	27
+	pushb 101
+	outb
+
+#line	27
+	pushb 110
+	outb
 
 #line	27
 	pushb 10
 	outb
-	ret 0 4 0
 
-call main
+ label3:
 
-halt
+#line	28
+	push bp
+	pushi -6
+	addi
+	push bp
+	pushi -6
+	addi
+	loadi
+	null
+	pushi 1
+	null
+	addi
+	storei
+	jmp label0
+
+ label1:
+
+#line	30
+	pushb 10
+	outb
+
+#line	32
+	push bp
+	pushi -6
+	addi
+	pushi 0
+	storei
+
+ label4:
+	push bp
+	pushi -6
+	addi
+	loadi
+	null
+	pushi 4
+	null
+	lti
+	jz label5
+
+#line	34
+	push bp
+	pushi -8
+	addi
+	pushi 0
+	storei
+
+ label6:
+	push bp
+	pushi -8
+	addi
+	loadi
+	null
+	pushi 5
+	null
+	lti
+	jz label7
+
+#line	36
+	push bp
+	pushi -48
+	addi
+	push bp
+	pushi -6
+	addi
+	loadi
+	pushi 10
+	muli
+	addi
+	push bp
+	pushi -8
+	addi
+	loadi
+	pushi 2
+	muli
+	addi
+	push bp
+	pushi -6
+	addi
+	loadi
+	null
+	push bp
+	pushi -8
+	addi
+	loadi
+	null
+	addi
+	storei
+
+#line	37
+	push bp
+	pushi -48
+	addi
+	push bp
+	pushi -6
+	addi
+	loadi
+	pushi 10
+	muli
+	addi
+	push bp
+	pushi -8
+	addi
+	loadi
+	pushi 2
+	muli
+	addi
+	loadi
+	outi
+
+#line	37
+	pushb 32
+	outb
+
+#line	38
+	push bp
+	pushi -8
+	addi
+	push bp
+	pushi -8
+	addi
+	loadi
+	null
+	pushi 1
+	null
+	addi
+	storei
+	jmp label6
+
+ label7:
+
+#line	40
+	pushb 10
+	outb
+
+#line	41
+	push bp
+	pushi -6
+	addi
+	push bp
+	pushi -6
+	addi
+	loadi
+	null
+	pushi 1
+	null
+	addi
+	storei
+	jmp label4
+
+ label5:
+	ret 0, 54, 0
