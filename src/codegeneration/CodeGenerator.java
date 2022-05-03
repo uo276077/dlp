@@ -75,7 +75,9 @@ public class CodeGenerator {
     }
 
     public void convert(Type from, Type to) {
-        writeLine(from.convertTo(to));
+        String convert = from.convertTo(to);
+        if (convert != null)
+            writeLine(convert);
     }
 
     public void arithmetic(String operator, Type type) {
@@ -222,5 +224,13 @@ public class CodeGenerator {
 
     public void multiplyIntegers() {
         writeLine("muli");
+    }
+
+    public void callFunction(String name) {
+        writeLine("call\t" + name);
+    }
+
+    public void pop(String suffix) {
+        writeLine("pop" + suffix);
     }
 }

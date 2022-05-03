@@ -67,4 +67,8 @@ public class FunctionType extends AbstractType {
         ));
     }
 
+    @Override
+    public int numberOfBytes() {
+        return parameters.stream().mapToInt(param -> param.getType().numberOfBytes()).sum();
+    }
 }

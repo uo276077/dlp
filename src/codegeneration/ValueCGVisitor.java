@@ -112,6 +112,10 @@ value[[FieldAccess: expression1 -> expression2 ID]] =
 		address[[expression1]]
 		<load> expression1.type.suffix()
 
+//Invocation as an expression
+value[[FunctionInvocation: expression1 -> expression2 expression3*]] =
+				expression3*.forEach(arg -> value[[arg]])
+				<call > expression2.name
 */
 
 import ast.Type;
@@ -257,6 +261,16 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
         indexing.accept(address, null);
         cg.load(indexing.getType());
+
+        return null;
+    }
+
+    @Override
+    public Void visit(FunctionInvocation invocation, Void param) {
+
+        invocation.getParameters().forEach(exp -> exp.accept(this, null));
+
+        cg.callFunction(invocation.getName().getName());
 
         return null;
     }
