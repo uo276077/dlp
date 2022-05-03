@@ -48,7 +48,7 @@ public class Main {
 //            IntrospectorModel model=new IntrospectorModel(
 //                    "Program", ast);
 //            new IntrospectorTree("Introspector", model);
-            CodeGenerator cg = new CodeGenerator("output.txt", args[0]);
+            CodeGenerator cg = new CodeGenerator("big-output.txt", args[0]);
             AddressCGVisitor addressCGVisitor = new AddressCGVisitor(cg);
             ValueCGVisitor valueCGVisitor = new ValueCGVisitor(cg, addressCGVisitor);
             addressCGVisitor.setValueVisitor(valueCGVisitor);
