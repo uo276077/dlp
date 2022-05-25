@@ -25,7 +25,7 @@ public class CodeGenerator {
             this.outputFile = new FileWriter(fileName, true);
             writeLineNoTab(String.format("#source\t\"%s\"\n", sourceName));
         } catch (IOException e){
-            //TODO
+
         }
     }
 
@@ -33,7 +33,7 @@ public class CodeGenerator {
         try {
             outputFile.write("\t" + line + "\n");
         } catch (IOException e) {
-            //TODO
+
         }
     }
 
@@ -41,7 +41,7 @@ public class CodeGenerator {
         try {
             outputFile.write("\n" + line + "\n");
         } catch (IOException e) {
-            //TODO
+
         }
     }
 
@@ -70,6 +70,10 @@ public class CodeGenerator {
         writeLine("pushi " + value);
     }
 
+    public void push(String suffix, int value) {
+        writeLine(String.format("push%s %d", suffix, value));
+    }
+
     public void load(Type type) {
         writeLine("load" + type.suffix());
     }
@@ -96,16 +100,14 @@ public class CodeGenerator {
                 op = "div";
                 break;
             default:
-                //TODO
-                break;
+                return;
         }
         String suffix = type.suffix();
         writeLine(op + suffix);
     }
 
-    public void charToInt(Type type) {
-        if (type instanceof CharType)
-            writeLine("b2i");
+    public void subtract(Type type) {
+        arithmetic("-", type);
     }
 
     public void compare(String operand, Type type) {
@@ -130,7 +132,7 @@ public class CodeGenerator {
                 compare = "eq";
                 break;
             default:
-                //TODO
+                return;
         }
         String suffix = type.suffix();
         writeLine(compare + suffix);
@@ -145,7 +147,7 @@ public class CodeGenerator {
 			    writeLine("or");
                 break;
             default:
-                //TODO
+                return;
         }
     }
 

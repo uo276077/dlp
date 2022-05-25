@@ -17,31 +17,32 @@ value[[ Variable: expression -> ID ]] =
 		<load> expression.type.suffix()
 
 value[[ Arithmetic: expression1 -> expression2 expression3 ]] =
+        Type superType = expression2.type.superType(expression3.type);
 		value[[expression2]]
-		expression2.type.convertTo(expression1.type)
+		expression2.type.convertTo(superType)
 
 		value[[expression3]]
-		expression3.type.convertTo(expression1.type)
+		expression3.type.convertTo(superType)
 
 		switch (expression1.operator) {
 		case "+":
-			<add> expression1.type.suffix()
+			<add> superType.suffix()
 			break;
 		case "-":
-			<sub> expression1.type.suffix()
+			<sub> superType.suffix()
 			break;
 		case "*":
-			<mul> expression1.type.suffix()
+			<mul> superType.suffix()
 			break;
 		case "/":
-			<div> expression1.type.suffix()
+			<div> superType.suffix()
 			break;
 		default:
 			//error
 		}
 
 value[[ Comparison: expression1 -> expression2 expression3 ]] =
-        Type superType = expression1.type.superType(expression2.type);
+        Type superType = expression2.type.superType(expression3.type);
 		value[[expression2]] //type checking has checked that they are the same type(?)
 		expression2.type.convertTo(superType)
 		value[[expression3]]
@@ -91,18 +92,17 @@ value[[ Cast: expression1 -> type expression2 ]] =
 
 value[[ UnaryNot: expression1 -> expression2 ]] =
         value[[expression2]]
-        < not >
+        <not>
 
 value[[ UnaryMinus: expression1 -> expression2 ]] =
-        < push >
-        expression1.type.suffix() < 0 >
+        <push> expression1.type.suffix() < 0>
         value[[expression2]]
-        < sub > expression1.type.suffix()
+        <sub> expression1.type.suffix()
 
 value[[ Modulus: expression1 -> expression2 expression3 ]] =
         value[[expression2]]
         value[[expression3]]
-        < mod >
+        <mod>
 
 value[[Indexing: expression1 -> expression2 expression3]] =
 		address[[expression1]]
@@ -234,7 +234,11 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
     @Override
     public Void visit(UnaryMinus unaryMinus, Void param) {
-        //TODO
+
+        cg.push(unaryMinus.getType().suffix(), 0);
+        unaryMinus.getExpression().accept(this, null);
+        cg.subtract(unaryMinus.getType());
+
         return null;
     }
 

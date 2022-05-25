@@ -126,7 +126,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<ExecuteCGDTO,Void> {
             cg.allocateMemory(bytesLocal);
 
         int bytesReturn = ((FunctionType)funcDefinition.getType()).getReturnType().numberOfBytes();
-        int bytesParams = funcDefinition.getType().numberOfBytes(); //TODO
+        int bytesParams = funcDefinition.getType().numberOfBytes();
 
         ExecuteCGDTO paramDTO = new ExecuteCGDTO(bytesReturn, bytesLocal, bytesParams);
 
