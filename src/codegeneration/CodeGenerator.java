@@ -22,7 +22,7 @@ public class CodeGenerator {
 
     public CodeGenerator(String fileName, String sourceName){
         try {
-            this.outputFile = new FileWriter(fileName, true);
+            this.outputFile = new FileWriter(fileName);
             writeLineNoTab(String.format("#source\t\"%s\"\n", sourceName));
         } catch (IOException e){
 
@@ -39,39 +39,39 @@ public class CodeGenerator {
 
     private void writeLineNoTab(String line) {
         try {
-            outputFile.write("\n" + line + "\n");
+            outputFile.write( line + "\n");
         } catch (IOException e) {
 
         }
     }
 
     public void writeLineNumber(int line) {
-        writeLineNoTab("#line\t" + line);
+        writeLineNoTab("\n#line\t" + line);
     }
 
     public void pushAddress(VarDefinition vardef) {
         if (vardef.getScope() > 0){
-            writeLine("push bp");
-            writeLine("pushi " + vardef.getOffset());
+            writeLine("push\tbp");
+            pushInt(vardef.getOffset());
             writeLine("addi");
         } else
-            writeLine("pusha " + vardef.getOffset());
+            writeLine("pusha\t" + vardef.getOffset());
     }
 
     public void pushByte(int value) {
-        writeLine("pushb " + value);
+        writeLine("pushb\t" + value);
     }
 
     public void pushFloat(double value) {
-        writeLine("pushf " + value);
+        writeLine("pushf\t" + value);
     }
 
     public void pushInt(int value) {
-        writeLine("pushi " + value);
+        writeLine("pushi\t" + value);
     }
 
     public void push(String suffix, int value) {
-        writeLine(String.format("push%s %d", suffix, value));
+        writeLine(String.format("push%s\t%d", suffix, value));
     }
 
     public void load(Type type) {
@@ -179,7 +179,7 @@ public class CodeGenerator {
 
     public void newFunction(FuncDefinition funcDefinition) {
         writeLineNumber(funcDefinition.getLine());
-        writeLineNoTab(String.format(" %s :", funcDefinition.getName()));
+        writeLineNoTab(String.format("\n %s :", funcDefinition.getName()));
     }
 
     public void generateComment(String comment) {
@@ -187,7 +187,7 @@ public class CodeGenerator {
     }
 
     public void allocateMemory(int memory) {
-        writeLine(String.format("enter %d", memory));
+        writeLine(String.format("enter\t%d", memory));
     }
 
     public void writeToFile() {
@@ -198,11 +198,13 @@ public class CodeGenerator {
     }
 
     public void ret(int returnBytes, int localVariablesBytes, int argumentsBytes) {
-        writeLine(String.format("ret %d, %d, %d", returnBytes, localVariablesBytes, argumentsBytes));
+        writeLine(String.format("ret\t\t%d, %d, %d", returnBytes, localVariablesBytes, argumentsBytes));
     }
 
     public void finishProgram() {
-        writeLineNoTab("call main\nhalt");
+        writeLineNoTab("\n' Invocation to the main function");
+        writeLineNoTab("call main");
+        writeLineNoTab("halt");
     }
 
     public void generateLabel(String conditionLabel) {
@@ -211,13 +213,13 @@ public class CodeGenerator {
 
     public void jumpConditionally(String exitLabel, boolean zero) {
         if (zero)
-            writeLine("jz " + exitLabel);
+            writeLine("jz\t\t" + exitLabel);
         else
-            writeLine("jnz " + exitLabel);
+            writeLine("jnz\t\t" + exitLabel);
     }
 
     public void jump(String conditionLabel) {
-        writeLine("jmp " + conditionLabel);
+        writeLine("jmp\t\t" + conditionLabel);
     }
 
     public void addIntegers() {

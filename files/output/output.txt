@@ -1,4 +1,3 @@
-
 #source	"input.txt"
 
 	' * Global variables:
@@ -9,6 +8,7 @@
 	' * struct {int integer; char character; } pair (offset 7)
 	' * [10][10]int matrix (offset 10)
 
+' Invocation to the main function
 call main
 halt
 
@@ -17,7 +17,8 @@ halt
  p :
 	' * Parameters:
 	' * Local variables:
-	ret 0, 0, 0
+	enter	0
+	ret		0, 0, 0
 
 #line	14
 
@@ -28,31 +29,31 @@ halt
 	' * Local variables:
 	' * double real (offset -4)
 	' * char c (offset -5)
-	enter 5
+	enter	5
 
 #line	17
-	push bp
-	pushi -4
+	push	bp
+	pushi	-4
 	addi
-	pusha 7
-	pushi 2
+	pusha	7
+	pushi	2
 	addi
 	loadb
 	b2i
 	i2f
-	pusha 7
-	pushi 0
+	pusha	7
+	pushi	0
 	addi
 	loadi
 	i2f
 	addf
-	push bp
-	pushi 6
+	push	bp
+	pushi	6
 	addi
 	loadf
 	addf
-	push bp
-	pushi 4
+	push	bp
+	pushi	4
 	addi
 	loadi
 	i2f
@@ -60,17 +61,20 @@ halt
 	storef
 
 #line	18
-	push bp
-	pushi -5
+	push	bp
+	pushi	-5
 	addi
-	pushb 48
+	pushb	48
 	storeb
-	push bp
-	pushi -5
+
+#line	19
+	' * Return
+	push	bp
+	pushi	-5
 	addi
 	loadb
 	b2i
-	ret 2, 5, 6
+	ret		2, 5, 6
 
 #line	24
 
@@ -82,91 +86,93 @@ halt
 	' * Local variables:
 	' * int i (offset -2)
 	' * int inc (offset -4)
-	enter 4
+	enter	4
 
 #line	26
-	push bp
-	pushi -2
+	push	bp
+	pushi	-2
 	addi
-	pushi 0
+	pushi	0
 	storei
 
 #line	27
-	push bp
-	pushi -4
+	push	bp
+	pushi	-4
 	addi
-	push bp
-	pushi 4
+	push	bp
+	pushi	4
 	addi
 	loadi
 	storei
 
+#line	28
+	' * While
  label0:
-	push bp
-	pushi -2
+	push	bp
+	pushi	-2
 	addi
 	loadi
-	pushi 10
+	pushi	10
 	lti
-	jz label1
+	jz		label1
+	' * Body of the while statement
 
 #line	29
-	pusha 10
-	push bp
-	pushi 8
+	pusha	10
+	push	bp
+	pushi	8
 	addi
 	loadi
-	pushi 20
+	pushi	20
 	muli
 	addi
-	push bp
-	pushi -2
+	push	bp
+	pushi	-2
 	addi
 	loadi
-	pushi 2
+	pushi	2
 	muli
 	addi
-	push bp
-	pushi 6
+	push	bp
+	pushi	6
 	addi
 	loadi
-	push bp
-	pushi -4
+	push	bp
+	pushi	-4
 	addi
 	loadi
 	addi
 	storei
 
 #line	30
-	push bp
-	pushi -2
+	push	bp
+	pushi	-2
 	addi
-	push bp
-	pushi -2
+	push	bp
+	pushi	-2
 	addi
 	loadi
-	pushi 1
+	pushi	1
 	addi
 	storei
 
 #line	31
-	push bp
-	pushi -4
+	push	bp
+	pushi	-4
 	addi
-	push bp
-	pushi -4
+	push	bp
+	pushi	-4
 	addi
 	loadi
-	push bp
-	pushi 4
+	push	bp
+	pushi	4
 	addi
 	loadi
 	addi
 	storei
-	jmp label0
-
+	jmp		label0
  label1:
-	ret 0, 4, 6
+	ret		0, 4, 6
 
 #line	35
 
@@ -175,96 +181,107 @@ halt
 	' * int row (offset 4)
 	' * Local variables:
 	' * int i (offset -2)
-	enter 2
+	enter	2
 
 #line	37
-	push bp
-	pushi -2
+	push	bp
+	pushi	-2
 	addi
-	pushi 0
+	pushi	0
 	storei
 
+#line	38
+	' * While
  label2:
-	push bp
-	pushi -2
+	push	bp
+	pushi	-2
 	addi
 	loadi
-	pushi 10
+	pushi	10
 	lti
-	jz label3
+	jz		label3
+	' * Body of the while statement
 
 #line	39
-	pushb 40
+	' * Write
+	pushb	40
 	outb
 
 #line	39
-	push bp
-	pushi 4
+	' * Write
+	push	bp
+	pushi	4
 	addi
 	loadi
 	outi
 
 #line	39
-	pushb 44
+	' * Write
+	pushb	44
 	outb
 
 #line	39
-	push bp
-	pushi -2
+	' * Write
+	push	bp
+	pushi	-2
 	addi
 	loadi
 	outi
 
 #line	39
-	pushb 41
+	' * Write
+	pushb	41
 	outb
 
 #line	39
-	pushb 58
+	' * Write
+	pushb	58
 	outb
 
 #line	39
-	pusha 10
-	push bp
-	pushi 4
+	' * Write
+	pusha	10
+	push	bp
+	pushi	4
 	addi
 	loadi
-	pushi 20
+	pushi	20
 	muli
 	addi
-	push bp
-	pushi -2
+	push	bp
+	pushi	-2
 	addi
 	loadi
-	pushi 2
+	pushi	2
 	muli
 	addi
 	loadi
 	outi
 
 #line	39
-	pushb 32
+	' * Write
+	pushb	32
 	outb
 
 #line	40
-	push bp
-	pushi -2
+	push	bp
+	pushi	-2
 	addi
-	push bp
-	pushi -2
+	push	bp
+	pushi	-2
 	addi
 	loadi
-	pushi 1
+	pushi	1
 	addi
 	storei
-	jmp label2
-
+	jmp		label2
  label3:
 
 #line	42
-	pushb 10
+	' * Write
+	pushb	10
 	outb
-	ret 0, 2, 2
+	ret		0, 2, 2
 
 #line	47
 
@@ -272,41 +289,42 @@ halt
 	' * Parameters:
 	' * Local variables:
 	' * int i (offset -2)
-	enter 2
+	enter	2
 
 #line	50
 	call	p
 
 #line	51
-	push bp
-	pushi -2
+	push	bp
+	pushi	-2
 	addi
-	pushi 0
+	pushi	0
 	storei
 
 #line	52
-	pusha 7
-	pushi 2
+	pusha	7
+	pushi	2
 	addi
-	pushb 48
+	pushb	48
 	storeb
 
 #line	53
-	pusha 7
-	pushi 0
+	pusha	7
+	pushi	0
 	addi
-	pushb 48
+	pushb	48
 	b2i
 	storei
 
 #line	54
-	push bp
-	pushi -2
+	' * Write
+	push	bp
+	pushi	-2
 	addi
 	loadi
 	i2f
-	pusha 7
-	pushi 2
+	pusha	7
+	pushi	2
 	addi
 	loadb
 	b2i
@@ -314,75 +332,78 @@ halt
 	outi
 
 #line	54
-	pushb 10
+	' * Write
+	pushb	10
 	outb
 
 #line	56
-	pushf 1.3
-	pushi 2
+	pushf	1.3
+	pushi	2
 	call	f
 	popi
 
 #line	58
-	push bp
-	pushi -2
+	push	bp
+	pushi	-2
 	addi
-	pushi 0
+	pushi	0
 	storei
 
 #line	59
-	pusha 4
-	pushi 0
+	pusha	4
+	pushi	0
 	storei
 
+#line	60
+	' * While
  label4:
-	push bp
-	pushi -2
+	push	bp
+	pushi	-2
 	addi
 	loadi
-	pushi 10
+	pushi	10
 	lti
-	jz label5
+	jz		label5
+	' * Body of the while statement
 
 #line	61
-	push bp
-	pushi -2
+	push	bp
+	pushi	-2
 	addi
 	loadi
-	pusha 4
+	pusha	4
 	loadi
-	pushi 1
+	pushi	1
 	call	fill
 
 #line	62
-	push bp
-	pushi -2
+	push	bp
+	pushi	-2
 	addi
 	loadi
 	call	show
 
 #line	63
-	push bp
-	pushi -2
+	push	bp
+	pushi	-2
 	addi
-	push bp
-	pushi -2
+	push	bp
+	pushi	-2
 	addi
 	loadi
-	pushi 1
+	pushi	1
 	addi
 	storei
 
 #line	64
-	pusha 4
-	push bp
-	pushi -2
+	pusha	4
+	push	bp
+	pushi	-2
 	addi
 	loadi
-	pushi 10
+	pushi	10
 	muli
 	storei
-	jmp label4
-
+	jmp		label4
  label5:
-	ret 0, 2, 0
+	ret		0, 2, 0

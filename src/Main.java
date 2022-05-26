@@ -1,8 +1,6 @@
 import ast.Program;
 import ast.errorhandler.ErrorHandler;
 import codegeneration.*;
-import introspector.model.IntrospectorModel;
-import introspector.view.IntrospectorTree;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -17,14 +15,19 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String... args) throws IOException {
-        if (args.length<1) {
-            System.err.println("Please, pass me the input file.");
+        if (args.length<2) {
+            System.err.println("Please, pass me both the input and output file.");
             return;
         }
 
+        String in = args[0];
+        String out = args[1];
+
         // create a lexer that feeds off of input CharStream
-        CharStream input = CharStreams.fromFileName(args[0]);
+        CharStream input = CharStreams.fromFileName(in);
         CmmLexer lexer = new CmmLexer(input);
+
+        in = in.split("/")[2];
 
         // create a parser that feeds off the tokens buffer
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -44,11 +47,7 @@ public class Main {
         if (ErrorHandler.getInstance().anyErrors())
             ErrorHandler.getInstance().showErrors(System.err);
         else {
-//            // * The AST is shown
-//            IntrospectorModel model=new IntrospectorModel(
-//                    "Program", ast);
-//            new IntrospectorTree("Introspector", model);
-            CodeGenerator cg = new CodeGenerator("big-output.txt", args[0]);
+            CodeGenerator cg = new CodeGenerator(out, in);
             AddressCGVisitor addressCGVisitor = new AddressCGVisitor(cg);
             ValueCGVisitor valueCGVisitor = new ValueCGVisitor(cg, addressCGVisitor);
             addressCGVisitor.setValueVisitor(valueCGVisitor);

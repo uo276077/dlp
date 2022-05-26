@@ -122,8 +122,8 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<ExecuteCGDTO,Void> {
         int bytesLocal = vardefs.size() > 0
                         ? - vardefs.get(vardefs.size()-1).getOffset()
                         : 0;
-        if (bytesLocal > 0)
-            cg.allocateMemory(bytesLocal);
+
+        cg.allocateMemory(bytesLocal);
 
         int bytesReturn = ((FunctionType)funcDefinition.getType()).getReturnType().numberOfBytes();
         int bytesParams = funcDefinition.getType().numberOfBytes();
@@ -159,6 +159,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<ExecuteCGDTO,Void> {
     public Void visit(Assignment assign, ExecuteCGDTO param) {
 
         cg.writeLineNumber(assign.getLine());
+        cg.generateComment("Assignment");
 
         assign.getLeft().accept(address, null);
         assign.getRight().accept(value, null);
@@ -182,6 +183,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<ExecuteCGDTO,Void> {
     public Void visit(Write writeSt, ExecuteCGDTO param) {
 
         cg.writeLineNumber(writeSt.getLine());
+        cg.generateComment("Write");
 
         writeSt.getArgument().accept(value, null);
         cg.write(writeSt.getArgument().getType());
@@ -200,15 +202,20 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<ExecuteCGDTO,Void> {
     @Override
     public Void visit(IfElse ifElse, ExecuteCGDTO param) {
 
+        cg.writeLineNumber(ifElse.getLine());
+        cg.generateComment("If statement");
+
         String elseLabel = cg.nextLabel(),
                 exitLabel = cg.nextLabel();
 
         ifElse.getCondition().accept(value, null);
         cg.jumpConditionally(elseLabel, true);
+        cg.generateComment("Body of the if branch");
         ifElse.getIfBody().forEach(stmt -> stmt.accept(this, param));
         cg.jump(exitLabel);
 
         cg.generateLabel(elseLabel);
+        cg.generateComment("Body of the else branch");
         ifElse.getElseBody().forEach(stmt -> stmt.accept(this, param));
 
         cg.generateLabel(exitLabel);
@@ -219,6 +226,9 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<ExecuteCGDTO,Void> {
     @Override
     public Void visit(While whileSt, ExecuteCGDTO param) {
 
+        cg.writeLineNumber(whileSt.getLine());
+        cg.generateComment("While");
+
         String conditionLabel = cg.nextLabel(),
                 exitLabel = cg.nextLabel();
 
@@ -227,6 +237,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<ExecuteCGDTO,Void> {
         whileSt.getCondition().accept(value, null);
         cg.jumpConditionally(exitLabel, true);
 
+        cg.generateComment("Body of the while statement");
         whileSt.getBody().forEach(stmt -> stmt.accept(this, param));
         cg.jump(conditionLabel);
 
@@ -252,6 +263,9 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<ExecuteCGDTO,Void> {
 
     @Override
     public Void visit(Return returnSt, ExecuteCGDTO param) {
+
+        cg.writeLineNumber(returnSt.getLine());
+        cg.generateComment("Return");
 
         returnSt.getReturnExpression().accept(value, null);
 

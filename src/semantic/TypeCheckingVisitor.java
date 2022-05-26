@@ -298,13 +298,14 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
     @Override
     public Void visit(IfElse ifElse, Void param) {
         ifElse.getCondition().accept(this, param);
+        ifElse.getIfBody().forEach(st -> st.setReturnType(ifElse.getReturnType()));
+        ifElse.getElseBody().forEach(st -> st.setReturnType(ifElse.getReturnType()));
+
         ifElse.getIfBody().forEach(s -> s.accept(this, param));
         ifElse.getElseBody().forEach(s -> s.accept(this, param));
 
         ifElse.getCondition().getType().asBoolean(ifElse.getCondition().getLine(), ifElse.getCondition().getColumn());
 
-        ifElse.getIfBody().forEach(st -> st.setReturnType(ifElse.getReturnType()));
-        ifElse.getElseBody().forEach(st -> st.setReturnType(ifElse.getReturnType()));
         return null;
     }
 
