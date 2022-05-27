@@ -4,9 +4,7 @@ import ast.Program;
 import ast.definitions.FuncDefinition;
 import ast.definitions.VarDefinition;
 import ast.expressions.*;
-import ast.expressions.literals.CharLiteral;
-import ast.expressions.literals.DoubleLiteral;
-import ast.expressions.literals.IntLiteral;
+import ast.expressions.literals.*;
 import ast.statements.*;
 import ast.types.*;
 import semantic.Visitor;
@@ -177,5 +175,20 @@ public abstract class AbstractCGVisitor<TR, TP> implements Visitor<TR, TP> {
     @Override
     public TP visit(VoidType voidType, TR param) {
         throw new RuntimeException(String.format("[ERROR] %d %d: VoidType", voidType.getLine(), voidType.getColumn()));
+    }
+
+    @Override
+    public TP visit(BooleanType booleanType, TR param) {
+        throw new RuntimeException(String.format("[ERROR] %d %d: BooleanType", booleanType.getLine(), booleanType.getColumn()));
+    }
+
+    @Override
+    public TP visit(TrueLiteral trueLiteral, TR param) {
+        throw new RuntimeException(String.format("[ERROR] %d %d: TrueLiteral", trueLiteral.getLine(), trueLiteral.getColumn()));
+    }
+
+    @Override
+    public TP visit(FalseLiteral falseLiteral, TR param) {
+        throw new RuntimeException(String.format("[ERROR] %d %d: FalseLiteral", falseLiteral.getLine(), falseLiteral.getColumn()));
     }
 }

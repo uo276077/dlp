@@ -4,9 +4,7 @@ import ast.Program;
 import ast.definitions.FuncDefinition;
 import ast.definitions.VarDefinition;
 import ast.expressions.*;
-import ast.expressions.literals.CharLiteral;
-import ast.expressions.literals.DoubleLiteral;
-import ast.expressions.literals.IntLiteral;
+import ast.expressions.literals.*;
 import ast.statements.*;
 import ast.types.*;
 
@@ -47,4 +45,9 @@ public interface Visitor<TP, TR> {
     TR visit(StructField structField, TP param);
     TR visit(StructType structType, TP param);
     TR visit(VoidType voidType, TP param);
+
+    //exam
+    TR visit(BooleanType booleanType, TP param);
+    TR visit(TrueLiteral trueLiteral, TP param);
+    TR visit(FalseLiteral falseLiteral, TP param);
 }

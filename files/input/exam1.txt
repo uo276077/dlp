@@ -1,0 +1,28 @@
+boolean f(boolean a, boolean b, boolean c){
+    return (a && b) || !c;
+}
+void main(){
+    boolean b1, b2, b3;
+    int a;
+
+    write f(true, false, false);   //1
+    write f(true, false, true);    //0
+    write f(false, true, true);    //0
+    write f(false, false, false),'\n';  //1
+
+    b1 = true;
+    b2 = 3 > 1;
+    b3 = 4.5 <= 4.2;
+    write b1;  //1
+    write b2;  //1
+    write b3,'\n';  //0
+
+    if(b1)  write 'Y';  //'Y'
+    else write 'N';
+
+    a = 0;
+    while(a<10){
+        write a;   //0123456789
+        a = a+1;
+    }
+}

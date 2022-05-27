@@ -237,4 +237,8 @@ public class CodeGenerator {
     public void pop(String suffix) {
         writeLine("pop" + suffix);
     }
+
+    public void out(String suffix) {
+        writeLine("out" + suffix);
+    }
 }

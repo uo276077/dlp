@@ -49,9 +49,9 @@ public class CharType extends AbstractType {
     @Override
     public Type compare(Type t, int line, int column) {
         if (t instanceof ErrorType)
-            return t;
+            return new BooleanType(line,column);
         if (t instanceof CharType)
-            return new IntType(line,column);
+            return new BooleanType(line,column);
         return new ErrorType(line, column, String.format(
                 "The type of %s does not support comparisons with %s.", t, this
         ));

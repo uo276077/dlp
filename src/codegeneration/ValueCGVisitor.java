@@ -11,6 +11,11 @@ value[[ CharLiteral: expression -> CHAR_CONSTANT ]] =
 value[[ DoubleLiteral: expression -> REAL_CONSTANT ]] =
 		<pushf> REAL_CONSTANT
 
+value[[ TrueLiteral: expression -> TRUE_CONSTANT ]] =
+        <pushi> 1
+
+value[[ FalseLiteral: expression -> FALSE_CONSTANT ]] =
+        <pushi> 0
 
 value[[ Variable: expression -> ID ]] =
 		address[[ expression ]]
@@ -120,9 +125,7 @@ value[[FunctionInvocation: expression1 -> expression2 expression3*]] =
 
 import ast.Type;
 import ast.expressions.*;
-import ast.expressions.literals.CharLiteral;
-import ast.expressions.literals.DoubleLiteral;
-import ast.expressions.literals.IntLiteral;
+import ast.expressions.literals.*;
 import semantic.Visitor;
 
 public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
@@ -159,6 +162,22 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
     @Override
+    public Void visit(TrueLiteral trueLiteral, Void param) {
+
+        cg.pushInt(1);
+
+        return null;
+    }
+
+    @Override
+    public Void visit(FalseLiteral falseLiteral, Void param) {
+
+        cg.pushInt(0);
+
+        return null;
+    }
+
+    @Override
     public Void visit(Variable variable, Void param) {
 
         variable.accept(address, null);
@@ -171,6 +190,7 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(Arithmetic arith, Void param) {
 
+        // (superType: new responsibility, take two types and return the "greater" one)
         Type superType = arith.getType().superType(arith.getLeft().getType());
 
         arith.getLeft().accept(this, null);
@@ -187,8 +207,8 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(Comparison comparison, Void param) {
 
-        // (superType: new responsibility, take two types and return the "greater" one)
-        Type superType = comparison.getType().superType(comparison.getOp1().getType());
+        //
+        Type superType = comparison.getOp1().getType().superType(comparison.getOp2().getType());
 
         comparison.getOp1().accept(this, null);
         cg.convert(comparison.getOp1().getType(), superType);

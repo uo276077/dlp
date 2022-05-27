@@ -3,9 +3,7 @@ package semantic;
 import ast.Type;
 import ast.definitions.FuncDefinition;
 import ast.expressions.*;
-import ast.expressions.literals.CharLiteral;
-import ast.expressions.literals.DoubleLiteral;
-import ast.expressions.literals.IntLiteral;
+import ast.expressions.literals.*;
 import ast.statements.*;
 import ast.types.*;
 
@@ -278,6 +276,20 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
     public Void visit(IntLiteral intLiteral, Void param) {
         intLiteral.setLvalue(false);
         intLiteral.setType(new IntType(intLiteral.getLine(), intLiteral.getColumn()));
+        return null;
+    }
+
+    @Override
+    public Void visit(TrueLiteral trueLiteral, Void param) {
+        trueLiteral.setLvalue(false);
+        trueLiteral.setType(new BooleanType(trueLiteral.getLine(), trueLiteral.getColumn()));
+        return null;
+    }
+
+    @Override
+    public Void visit(FalseLiteral falseLiteral, Void param) {
+        falseLiteral.setLvalue(false);
+        falseLiteral.setType(new BooleanType(falseLiteral.getLine(), falseLiteral.getColumn()));
         return null;
     }
 

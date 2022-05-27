@@ -34,9 +34,9 @@ public class IntType extends AbstractType {
     @Override
     public Type compare(Type t, int line, int column) {
         if (t instanceof ErrorType)
-            return t;
+            return new BooleanType(line,column);
         if (t instanceof IntType)
-            return this;
+            return new BooleanType(line,column);
         return new ErrorType(line, column, String.format(
                 "The type of %s does not support comparisons with %s.", t, this
         ));
@@ -73,21 +73,6 @@ public class IntType extends AbstractType {
         ));
     }
 
-    @Override
-    public Type logical(Type t, int line, int column) {
-        if (t instanceof ErrorType)
-            return t;
-        if (t instanceof IntType)
-            return this;
-        return new ErrorType(line, column, String.format(
-                "The type of %s does not support logical operations.", t
-        ));
-    }
-
-    @Override
-    public Type negation(int line, int column) {
-        return this;
-    }
 
     @Override
     public void assign(Type type, int line, int column) {
@@ -98,10 +83,6 @@ public class IntType extends AbstractType {
         new ErrorType(line, column, String.format(
                 "Cannot assign type %s to type %s.", type, this
         ));
-    }
-
-    @Override
-    public void asBoolean(int line, int column) {
     }
 
     @Override

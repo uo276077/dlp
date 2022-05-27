@@ -4,9 +4,7 @@ import ast.Program;
 import ast.definitions.FuncDefinition;
 import ast.definitions.VarDefinition;
 import ast.expressions.*;
-import ast.expressions.literals.CharLiteral;
-import ast.expressions.literals.DoubleLiteral;
-import ast.expressions.literals.IntLiteral;
+import ast.expressions.literals.*;
 import ast.statements.*;
 import ast.types.*;
 
@@ -204,6 +202,21 @@ public abstract class AbstractVisitor<TP,TR> implements Visitor<TP,TR> {
 
     @Override
     public TR visit(Variable e, TP param) {
+        return null;
+    }
+
+    @Override
+    public TR visit(BooleanType booleanType, TP param) {
+        return null;
+    }
+
+    @Override
+    public TR visit(TrueLiteral trueLiteral, TP param) {
+        return null;
+    }
+
+    @Override
+    public TR visit(FalseLiteral falseLiteral, TP param) {
         return null;
     }
 }

@@ -96,6 +96,8 @@ built_in_type returns [Type ast]:
                 { $ast = new DoubleType($a.getLine(), $a.getCharPositionInLine()+1); }
              | a='char'
                 { $ast = new CharType($a.getLine(), $a.getCharPositionInLine()+1); }
+             | a='boolean'
+                { $ast = new BooleanType($a.getLine(), $a.getCharPositionInLine()+1); }
              ;
 statement returns [List<Statement> ast = new ArrayList<Statement>();]
                 locals [List<Statement> elseBody = new ArrayList<Statement>();, List<Expression> args = null]:
@@ -185,6 +187,10 @@ expression returns [Expression ast]
         | c1=CHAR_CONSTANT
             { $ast = new CharLiteral($c1.getLine(), $c1.getCharPositionInLine()+1,
                                     LexerHelper.lexemeToChar($c1.text)); }
+        | b1=TRUE_CONSTANT
+            { $ast = new TrueLiteral($b1.getLine(), $b1.getCharPositionInLine()+1); }
+        | b1=FALSE_CONSTANT
+            { $ast = new FalseLiteral($b1.getLine(), $b1.getCharPositionInLine()+1); }
        ;
 
 arguments returns [List<Expression> ast = new ArrayList<Expression>();]:
@@ -216,6 +222,12 @@ fragment
                 | DIGIT* '.' DIGIT+
 ;
 
+
+TRUE_CONSTANT: 'true'
+    ;
+
+FALSE_CONSTANT: 'false'
+    ;
 
 ID: (LETTER | '_') ID_CHAR*
     ;
